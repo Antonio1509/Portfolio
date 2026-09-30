@@ -33,3 +33,106 @@ async function submitForm(event) {
     </div>
   </section>
 </template>
+
+<style scoped>
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1.05fr .85fr;
+  gap: 12%;
+  margin-top: 48px;
+}
+
+.contact-copy .lead {
+  max-width: 390px;
+}
+
+.contact-email {
+  display: inline-flex;
+  gap: 25px;
+  align-items: center;
+  font: 500 17px var(--display);
+  padding: 21px 0;
+  margin-top: 20px;
+  border-bottom: 1px solid #65583d;
+}
+
+.contact-email span {
+  color: var(--gold);
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 35px;
+  font: 9px var(--mono);
+  letter-spacing: 1px;
+  color: #88867f;
+}
+
+.contact-details div {
+  display: flex;
+  gap: 24px;
+}
+
+.contact-details a {
+  color: #d6d3cd;
+}
+
+.contact-details a:hover {
+  color: var(--gold);
+}
+
+.contact-form {
+  padding-top: 9px;
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-form label {
+  font: 9px var(--mono);
+  letter-spacing: 1.2px;
+  color: #aaa69b;
+  margin: 0 0 9px;
+}
+
+.contact-form input, .contact-form textarea {
+  border: 0;
+  border-bottom: 1px solid #393936;
+  background: transparent;
+  color: var(--text);
+  border-radius: 0;
+  padding: 10px 0 14px;
+  margin-bottom: 25px;
+  outline: none;
+  resize: vertical;
+  font-size: 13px;
+}
+
+.contact-form input:focus, .contact-form textarea:focus {
+  border-color: var(--gold);
+}
+
+.contact-form input::placeholder, .contact-form textarea::placeholder {
+  color: #66645f;
+}
+
+.contact-form .button {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.form-note {
+  color: #74736e;
+  font-size: 10px;
+  margin: 12px 0;
+}
+
+@media (max-width:800px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+    gap: 50px;
+    margin-top: 35px;
+  }
+}
+</style>

@@ -55,8 +55,7 @@ The contact form posts to the Formspree endpoint configured in `src/views/Contac
     |-- App.vue                # Top-level layout
     |-- main.js                # Vue app entry point
     |-- assets/
-    |   |-- favicon.svg        # Browser tab icon
-    |   `-- style.css          # Global responsive styles
+    |   `-- cg-monogram.png    # Monogram logo and browser tab icon
     |-- components/
     |   |-- SiteHeader.vue     # Shared navigation
     |   `-- SiteFooter.vue     # Shared footer
@@ -68,6 +67,8 @@ The contact form posts to the Formspree endpoint configured in `src/views/Contac
         |-- SkillsView.vue
         `-- ContactView.vue
 ```
+
+Shared base styles are in `App.vue`; each component and page keeps its own scoped styles after its template.
 
 ## Repository
 
