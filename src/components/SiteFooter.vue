@@ -5,7 +5,7 @@ const year = new Date().getFullYear()
 <template>
   <footer class="site-footer">
     <RouterLink class="footer-brand" to="/">Chad<span>Gys</span></RouterLink>
-    <p>Thoughtful interfaces. Built with care.</p>
+    <p>Made in Cape Town by Chad Gys.</p>
     <div class="footer-meta"><span>© {{ year }} Chad Gys</span><span>Cape Town, South Africa</span><a href="mailto:gyschad206@email.com">Email ↗</a></div>
   </footer>
 </template>
@@ -37,8 +37,7 @@ const year = new Date().getFullYear()
   display: flex;
   gap: 22px;
   align-items: center;
-  font: 9px var(--mono);
-  letter-spacing: .5px;
+  font-size: 11px;
 }
 
 .footer-meta a {

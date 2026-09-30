@@ -1,7 +1,7 @@
 <script setup>
 defineProps({ menuOpen: Boolean })
 defineEmits(['toggle-menu', 'navigate'])
-const links = [{ to: '/', label: 'Home' }, { to: '/about', label: 'About' }, { to: '/skills', label: 'Skills' }]
+const links = [{ to: '/', label: 'Home' }, { to: '/about', label: 'About' }, { to: '/projects', label: 'Projects' }, { to: '/skills', label: 'Skills' }]
 </script>
 
 <template>

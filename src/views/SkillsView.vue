@@ -1,107 +1,63 @@
 <script setup>
 const skills = [
-  { number: '01', name: 'HTML', detail: 'I can build well-structured, semantic pages with accessible markup.', level: 'CONFIDENT' },
-  { number: '02', name: 'CSS', detail: 'I can style responsive interfaces using Flexbox, Grid, and modern CSS.', level: 'CONFIDENT' },
-  { number: '03', name: 'JavaScript', detail: 'Core programming logic and dynamic client-side interactivity.', level: 'LEARNING' },
-  { number: '04', name: 'Python', detail: 'Programming fundamentals, scripting, and problem-solving.', level: 'LEARNING' },
-  { number: '05', name: 'Node.js', detail: 'Backend development and setting up APIs.', level: 'LEARNING' },
+  { name: 'HTML', detail: 'Semantic page structure and form controls used across my websites.', stage: 'In use' },
+  { name: 'CSS', detail: 'Responsive layouts and visual styling with Flexbox, Grid, and media queries.', stage: 'In use' },
+  { name: 'JavaScript', detail: 'Page interactions, filtering, sorting, themes, and favourites in my projects.', stage: 'In use' },
+  { name: 'Vue 3', detail: 'Single-file components used in this portfolio, the marketplace, and the listings project.', stage: 'In use' },
+  { name: 'Vue Router', detail: 'Page navigation in this portfolio and Vue projects.', stage: 'In use' },
+  { name: 'Git and GitHub', detail: 'Version control and repositories for my projects.', stage: 'In use' },
+  { name: 'Python', detail: 'Programming practice and the backend for the scraping dashboard.', stage: 'Still learning' },
+  { name: 'Flask and REST APIs', detail: 'Building backend routes and serving data to a frontend.', stage: 'Still learning' },
+  { name: 'Web scraping', detail: 'Collecting product data with Requests and BeautifulSoup.', stage: 'Still learning' },
+  { name: 'SQLite', detail: 'Storing scraped items, history, and website data.', stage: 'Still learning' },
+  { name: 'Pinia', detail: 'Managing shared state in the scraping dashboard.', stage: 'Still learning' },
+  { name: 'Axios', detail: 'Making requests from a Vue frontend to backend API routes.', stage: 'Still learning' },
+  { name: 'Three.js', detail: 'Creating interactive 3D scenes in the scraping dashboard.', stage: 'Still learning' },
+  { name: 'Automated testing', detail: 'Writing backend tests with pytest.', stage: 'Still learning' },
+  { name: 'Vite', detail: 'Running and building the Vue applications.', stage: 'Still learning' },
 ]
 </script>
 
 <template>
   <section class="inner-page page-wrap">
-    <p class="eyebrow"><span>02</span> / SKILLS</p>
-    <div class="inner-heading"><h1>Tools for<br /><em>what’s next.</em></h1>
-      <p class="lead">Core skills I’m building through structured learning, personal projects, and plenty of hands-on practice.</p></div>
-    <div class="skills-list"><article v-for="skill in skills" :key="skill.number" class="skill-row"><span class="skill-number">{{ skill.number }}</span>
-      <h2>{{ skill.name }}</h2><p>{{ skill.detail }}</p><span class="skill-level">{{ skill.level }}</span><span class="skill-arrow">↗</span></article></div>
-    <p class="skills-note"><span>✳</span> Always learning. Always building.</p>
+    <p class="eyebrow">Skills</p>
+    <div class="inner-heading">
+      <h1>What I've used</h1>
+      <p class="lead">Skills shown in my projects, along with the tools and concepts I'm still learning.</p>
+    </div>
+    <div class="skills-list">
+      <article v-for="skill in skills" :key="skill.name" class="skill-row">
+        <h2>{{ skill.name }}</h2>
+        <p>{{ skill.detail }}</p>
+        <span class="skill-status" :class="{ learning: skill.stage === 'Still learning' }">{{ skill.stage }}</span>
+      </article>
+    </div>
   </section>
 </template>
 
 <style scoped>
-.skills-list {
-  border-top: 1px solid var(--line);
-}
-
+.skills-list { border-top: 1px solid var(--line); }
 .skill-row {
-  min-height: 116px;
+  min-height: 92px;
   display: grid;
-  grid-template-columns: 60px .85fr 1.4fr 120px 20px;
+  grid-template-columns: minmax(175px, .7fr) minmax(240px, 1.5fr) 120px;
   align-items: center;
-  gap: 22px;
+  gap: 28px;
   border-bottom: 1px solid var(--line);
-  transition: padding .2s;
 }
-
-.skill-row:hover {
-  padding-inline: 10px;
-}
-
-.skill-number {
+.skill-row h2 { margin: 0; font: 500 19px var(--display); }
+.skill-row p { max-width: 470px; margin: 0; color: #97958f; font-size: 12px; line-height: 1.65; }
+.skill-status {
+  justify-self: start;
+  color: #a9b19f;
   font: 10px var(--mono);
-  color: var(--gold);
+  letter-spacing: .04em;
 }
-
-.skill-row h2 {
-  font: 500 24px var(--display);
-  letter-spacing: -.5px;
-  margin: 0;
-}
-
-.skill-row p {
-  margin: 0;
-  color: #97958f;
-  font-size: 12px;
-  max-width: 350px;
-}
-
-.skill-level {
-  font: 9px var(--mono);
-  letter-spacing: 1px;
-  color: #8e8a80;
-}
-
-.skill-arrow {
-  color: var(--gold);
-  font-size: 15px;
-}
-
-.skills-note {
-  margin-top: 32px;
-  color: #97958f;
-  font-size: 12px;
-}
-
-.skills-note span {
-  color: var(--gold);
-  font-size: 19px;
-  vertical-align: middle;
-  margin-right: 10px;
-}
-
-@media (max-width:800px) {
-  .skill-row {
-    grid-template-columns: 35px 1fr 20px;
-    gap: 10px;
-    padding: 18px 0;
-    min-height: 0;
-  }
-  .skill-row h2 {
-    font-size: 21px;
-  }
-  .skill-row p {
-    grid-column: 2;
-    grid-row: 2;
-  }
-  .skill-level {
-    grid-column: 2;
-    grid-row: 3;
-    margin-top: 6px;
-  }
-  .skill-arrow {
-    grid-column: 3;
-    grid-row: 1;
-  }
+.skill-status.learning { color: var(--gold-bright); }
+@media (max-width: 800px) {
+  .skill-row { grid-template-columns: 1fr auto; gap: 6px 18px; min-height: 0; padding: 17px 0; }
+  .skill-row h2 { font-size: 18px; }
+  .skill-row p { grid-column: 1 / -1; grid-row: 2; }
+  .skill-status { grid-column: 2; grid-row: 1; }
 }
 </style>

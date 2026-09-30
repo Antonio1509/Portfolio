@@ -8,11 +8,12 @@ This portfolio is an online introduction and evolving record of my software deve
 
 ## Features
 
-- Four routed sections: Home, About, Skills, and Contact.
+- Five routed sections: Home, About, Projects, Skills, and Contact.
 - Responsive layouts for desktop and mobile screens.
 - Reusable navigation and footer components shared across the site.
-- Dark theme, gold accents, and custom CG favicon.
-- Skills overview covering HTML, CSS, JavaScript, Python, and Node.js.
+- Dark theme, gold accents, and the CG monogram used as the site logo and favicon.
+- Projects page featuring seven projects with links to their GitHub repositories.
+- Skills described with examples from project code and programming exercises.
 - Contact form with browser validation and asynchronous Formspree submission, including sending, success, and error states.
 - Email, GitHub, and LinkedIn links.
 
@@ -55,7 +56,16 @@ The contact form posts to the Formspree endpoint configured in `src/views/Contac
     |-- App.vue                # Top-level layout
     |-- main.js                # Vue app entry point
     |-- assets/
-    |   `-- cg-monogram.png    # Monogram logo and browser tab icon
+    |   |-- cg-monogram.png    # Monogram logo and browser tab icon
+    |   `-- projects/
+    |       |-- food-fest-tickets.jpg # Ticket page preview on the home page
+    |       |-- portfolio-home.jpg
+    |       |-- food-fest-home.jpg
+    |       |-- ecommerce-home.jpg
+    |       |-- scraping-dashboard-home.jpg
+    |       |-- hr-dashboard-home.jpg
+    |       |-- pet-care-home.jpg
+    |       `-- property-listings-home.jpg
     |-- components/
     |   |-- SiteHeader.vue     # Shared navigation
     |   `-- SiteFooter.vue     # Shared footer
@@ -64,6 +74,7 @@ The contact form posts to the Formspree endpoint configured in `src/views/Contac
     `-- views/
         |-- HomeView.vue
         |-- AboutView.vue
+        |-- ProjectsView.vue
         |-- SkillsView.vue
         `-- ContactView.vue
 ```

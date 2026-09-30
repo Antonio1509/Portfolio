@@ -6,6 +6,7 @@ import SiteFooter from './components/SiteFooter.vue'
 
 const route = useRoute()
 const titles = { '/': 'Chad Gys — Front-end Developer', '/about': 'About — Chad Gys', '/skills': 'Skills — Chad Gys', '/contact': 'Contact — Chad Gys' }
+titles['/projects'] = 'Projects - Chad Gys'
 const menuOpen = ref(false)
 watch(() => route.path, (path) => { document.title = titles[path] || titles['/']; menuOpen.value = false }, { immediate: true })
 </script>
@@ -84,15 +85,14 @@ button, a {
 }
 
 .eyebrow {
-  font: 10px var(--mono);
-  letter-spacing: 1.6px;
+  font-size: 13px;
   color: #aaa9a4;
-  text-transform: uppercase;
+  margin: 0 0 16px;
 }
 
 .hero h1, .inner-heading h1, .contact-copy h1 {
   font: 600 clamp(46px,6.5vw,79px)/1.1 var(--display);
-  letter-spacing: -4.5px;
+  letter-spacing: -3px;
   margin: 29px 0 20px;
 }
 
