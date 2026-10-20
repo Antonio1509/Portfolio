@@ -38,15 +38,15 @@ async function submitForm(event) {
   <section id="contact" class="inner-page page-wrap contact-page">
     <p class="eyebrow">Contact</p>
     <div class="contact-layout">
-      <div class="contact-copy">
+      <div v-reveal class="contact-copy">
         <HeadingFlow><h1>Let's Connect and Collaborate</h1></HeadingFlow>
         <div class="contact-details">
-          <div class="contact-detail"><h2>Location</h2><span>Cape Town</span></div>
-          <div class="contact-detail"><h2>Phone</h2><a href="tel:06835863">06835863</a></div>
-          <div class="contact-detail"><h2>Email</h2><a class="contact-email" href="mailto:gyschad206@email.com">gyschad206@email.com <span>↗</span></a></div>
+          <div v-reveal class="contact-detail"><h2>Location</h2><span>Cape Town</span></div>
+          <div v-reveal="1" class="contact-detail"><h2>Phone</h2><a href="tel:06835863">06835863</a></div>
+          <div v-reveal="2" class="contact-detail"><h2>Email</h2><a v-magnetic class="contact-email" href="mailto:gyschad206@email.com">gyschad206@email.com <span>↗</span></a></div>
         </div>
       </div>
-      <form class="contact-form" action="https://formspree.io/f/mjgznprl" method="POST" @submit.prevent="submitForm">
+      <form v-reveal class="contact-form" action="https://formspree.io/f/mjgznprl" method="POST" @submit.prevent="submitForm">
         <label for="name">Full Name *</label>
         <input id="name" v-model="form.name" name="name" placeholder="Full Name" autocomplete="name" required />
         <label for="email">Email *</label>
@@ -54,7 +54,7 @@ async function submitForm(event) {
         <input type="hidden" name="_replyto" :value="form.email" />
         <label for="message">Message *</label>
         <textarea id="message" v-model="form.message" name="message" rows="4" placeholder="Message" required></textarea>
-        <button class="button button-gold" type="submit" :disabled="sending">{{ sending ? 'Sending…' : 'Submit' }}</button>
+        <button v-magnetic class="button button-gold" type="submit" :disabled="sending">{{ sending ? 'Sending…' : 'Submit' }}</button>
         <p class="form-note" role="status" aria-live="polite">{{ status || 'Your message will be sent directly to Chad.' }}</p>
       </form>
     </div>
@@ -143,6 +143,10 @@ async function submitForm(event) {
 .contact-form .button {
   align-self: flex-start;
   margin-top: 4px;
+}
+
+.contact-form .button {
+  transition: background .2s, transform .28s cubic-bezier(.2,.7,.2,1);
 }
 
 .form-note {

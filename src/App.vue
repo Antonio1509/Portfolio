@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import AmbientLines from './components/AmbientLines.vue'
 import SiteHeader from './components/SiteHeader.vue'
 import SiteFooter from './components/SiteFooter.vue'
@@ -10,10 +10,36 @@ import ProjectsView from './views/ProjectsView.vue'
 import ContactView from './views/ContactView.vue'
 
 const menuOpen = ref(false)
+const cursorGlow = ref(null)
+let glowFrame = 0
+let cursorPosition = { x: 0, y: 0 }
+
+function updateCursorGlow(event) {
+  cursorPosition = { x: event.clientX, y: event.clientY }
+  if (glowFrame) return
+  glowFrame = requestAnimationFrame(() => {
+    cursorGlow.value?.style.setProperty('--cursor-x', `${cursorPosition.x}px`)
+    cursorGlow.value?.style.setProperty('--cursor-y', `${cursorPosition.y}px`)
+    glowFrame = 0
+  })
+}
+
+onMounted(() => {
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    window.addEventListener('pointermove', updateCursorGlow, { passive: true })
+  }
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('pointermove', updateCursorGlow)
+  if (glowFrame) cancelAnimationFrame(glowFrame)
+})
 </script>
 
 <template>
   <AmbientLines />
+  <div ref="cursorGlow" class="cursor-glow" aria-hidden="true"></div>
   <SiteHeader :menu-open="menuOpen" @toggle-menu="menuOpen = !menuOpen" @navigate="menuOpen = false" />
   <main>
     <HomeView />
@@ -72,6 +98,50 @@ body {
 main, .site-header, .site-footer {
   position: relative;
   z-index: 1;
+}
+
+.cursor-glow {
+  position: fixed;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  width: 440px;
+  height: 440px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle, rgba(213,181,121,.075), rgba(213,181,121,0) 68%);
+  transform: translate3d(var(--cursor-x, -600px), var(--cursor-y, -600px), 0) translate(-50%, -50%);
+  transition: opacity .35s ease;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .cursor-glow {
+    opacity: 1;
+  }
+}
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .55s ease var(--reveal-delay, 0ms), transform .55s cubic-bezier(.2,.7,.2,1) var(--reveal-delay, 0ms);
+}
+
+.scroll-reveal-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.magnetic {
+  transition: transform .28s cubic-bezier(.2,.7,.2,1);
+}
+
+.magnetic.is-magnetic {
+  transform: translate3d(var(--mag-x, 0), var(--mag-y, 0), 0);
+}
+
+.button.magnetic.is-magnetic:hover {
+  transform: translate3d(var(--mag-x, 0), calc(var(--mag-y, 0px) - 2px), 0);
 }
 
 a {
@@ -152,6 +222,12 @@ button, a {
 .text-link span {
   color: var(--gold);
   padding-left: 8px;
+  display: inline-block;
+  transition: transform .25s ease;
+}
+
+.text-link:hover span {
+  transform: translateX(3px);
 }
 
 .inner-page {
@@ -194,6 +270,27 @@ button, a {
   outline-color: transparent;
 }
 
+@keyframes hero-enter {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-greeting h1 {
+  animation: hero-enter .65s cubic-bezier(.2,.7,.2,1) both;
+}
+
+.hero-intro {
+  animation: hero-enter .65s cubic-bezier(.2,.7,.2,1) .13s both;
+}
+
+.hero-actions {
+  animation: hero-enter .65s cubic-bezier(.2,.7,.2,1) .26s both;
+}
+
+.featured-project {
+  animation: hero-enter .75s cubic-bezier(.2,.7,.2,1) .39s both;
+}
+
 #netlify-badge,
 #nl-badge,
 [id*="netlify" i],
@@ -229,6 +326,31 @@ iframe[src*="netlify" i] {
   }
   .contact-copy h1 {
     font-size: clamp(52px,10vw,70px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .scroll-reveal,
+  .hero-greeting h1,
+  .hero-intro,
+  .hero-actions,
+  .featured-project {
+    opacity: 1;
+    transform: none;
+    animation: none;
+    transition: none;
+  }
+  .cursor-glow {
+    display: none;
+  }
+  .button:hover {
+    transform: none;
+  }
+  .text-link:hover span {
+    transform: none;
   }
 }
 

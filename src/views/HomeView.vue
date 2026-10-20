@@ -28,7 +28,7 @@ import HeadingFlow from '../components/HeadingFlow.vue'
         Open to internships and learning opportunities.
       </p>
       <div class="hero-actions">
-        <a class="button button-gold" href="#projects">Explore My Work <span>→</span></a>
+        <a v-magnetic class="button button-gold" href="#projects">Explore My Work <span>→</span></a>
         <a class="text-link" href="#about">About <span>→</span></a>
       </div>
     </div>

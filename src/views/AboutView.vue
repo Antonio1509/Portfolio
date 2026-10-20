@@ -15,15 +15,15 @@ const aboutParagraphs = [
 <template>
   <section id="about" class="inner-page page-wrap">
     <p class="eyebrow">About</p>
-    <div class="inner-heading"><HeadingFlow><h1>My Journey</h1></HeadingFlow>
+    <div v-reveal class="inner-heading"><HeadingFlow><h1>My Journey</h1></HeadingFlow>
       <p class="lead">Building real products, one project at a time.</p></div>
     <div class="about-grid">
-      <div class="about-art"><div class="about-image"><img :src="portrait" alt="Portrait of Chad Gys" /></div></div>
-      <div class="about-copy">
+      <div v-reveal class="about-art"><div class="about-image"><img :src="portrait" alt="Portrait of Chad Gys" /></div></div>
+      <div v-reveal class="about-copy">
         <p v-for="paragraph in aboutParagraphs" :key="paragraph">{{ paragraph }}</p>
         <p class="quick-facts-title">Quick facts:</p>
         <p>Based in Cape Town, Studying Software Development, Open to Internships.</p>
-        <a class="text-link" href="#contact">Let's Connect and Collaborate <span>→</span></a>
+        <a v-magnetic class="text-link" href="#contact">Let's Connect and Collaborate <span>→</span></a>
       </div>
     </div>
   </section>

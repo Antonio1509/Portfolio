@@ -23,12 +23,12 @@ const skills = [
 <template>
   <section id="skills" class="inner-page page-wrap">
     <p class="eyebrow">Skills</p>
-    <div class="inner-heading">
+    <div v-reveal class="inner-heading">
       <HeadingFlow><h1>What I've used</h1></HeadingFlow>
       <p class="lead">Skills shown in my projects, along with the tools and concepts I'm still learning.</p>
     </div>
     <div class="skills-list">
-      <article v-for="skill in skills" :key="skill.name" class="skill-row">
+      <article v-for="(skill, index) in skills" :key="skill.name" v-reveal="index" class="skill-row">
         <h2>{{ skill.name }}</h2>
         <p>{{ skill.detail }}</p>
         <span class="skill-status" :class="{ learning: skill.stage === 'Still learning' }">{{ skill.stage }}</span>

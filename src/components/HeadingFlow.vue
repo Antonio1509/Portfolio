@@ -26,8 +26,8 @@
   position: absolute;
   z-index: -1;
   top: -12px;
-  left: -24px;
-  width: calc(100% + 48px);
+  left: 0;
+  width: 100%;
   height: calc(100% + 58px);
   overflow: visible;
   pointer-events: none;

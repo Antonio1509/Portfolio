@@ -78,13 +78,13 @@ const projects = [
 <template>
   <section id="projects" class="projects-page inner-page page-wrap">
     <p class="eyebrow">Selected work</p>
-    <div class="inner-heading">
+    <div v-reveal class="inner-heading">
       <HeadingFlow><h1>Projects I've worked on</h1></HeadingFlow>
       <p class="lead">A selection of coursework and personal projects. Open a repository to explore its code.</p>
     </div>
 
     <div class="projects-grid">
-      <article v-for="project in projects" :key="project.name" class="project-card">
+      <article v-for="(project, index) in projects" :key="project.name" v-reveal="index" v-tilt class="project-card">
         <div class="project-visual">
           <img :src="project.image" :alt="project.imageAlt" loading="lazy" />
         </div>
@@ -97,7 +97,7 @@ const projects = [
             <li v-for="technology in project.technologies" :key="technology">{{ technology }}</li>
           </ul>
           <div class="project-links">
-            <a :href="project.href" target="_blank" rel="noopener noreferrer">View GitHub repository <span aria-hidden="true">&rarr;</span></a>
+            <a v-magnetic :href="project.href" target="_blank" rel="noopener noreferrer">View GitHub repository <span aria-hidden="true">&rarr;</span></a>
           </div>
         </div>
       </article>
@@ -114,9 +114,48 @@ const projects = [
   border-top: 1px solid var(--line);
   padding-top: 28px;
 }
-.project-card { min-width: 0; border: 1px solid var(--line); background: #111214; }
-.project-visual { width: 100%; aspect-ratio: 16 / 10; overflow: hidden; background: #171717; }
-.project-visual > img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.project-card {
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: #111214;
+  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(var(--card-lift, 0));
+  transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease, border-color .35s ease;
+  transform-style: preserve-3d;
+}
+.project-visual { position: relative; width: 100%; aspect-ratio: 16 / 10; overflow: hidden; background: #171717; }
+.project-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(213,181,121,.1), transparent 55%);
+  transition: opacity .35s ease;
+}
+.project-visual > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform .4s cubic-bezier(.2,.7,.2,1);
+}
+.project-links a {
+  display: inline-block;
+  transition: color .25s ease, transform .25s ease;
+}
+.project-card:active { transform: perspective(900px) scale(.99); }
+.project-card:hover {
+  --card-lift: -7px;
+  box-shadow: 0 18px 42px rgba(0,0,0,.28);
+  border-color: rgba(213,181,121,.3);
+}
+.project-card:hover .project-visual::after { opacity: 1; }
+.project-card:hover .project-visual > img { transform: scale(1.03); }
+.project-card:hover .project-links a { transform: translateY(-2px); }
+.project-card:hover .project-links a.magnetic.is-magnetic {
+  transform: translate3d(var(--mag-x, 0), calc(var(--mag-y, 0px) - 2px), 0);
+}
 .project-details { padding: 22px 25px 24px; }
 .project-kind { margin: 0 0 9px; color: #c7aa72; font: 10px var(--mono); letter-spacing: .07em; text-transform: uppercase; }
 .project-details h2 { margin: 0 0 9px; font: 500 21px var(--display); }
@@ -130,5 +169,16 @@ const projects = [
   .projects-page { padding-top: 46px; }
   .projects-grid { grid-template-columns: 1fr; gap: 20px; }
   .project-visual { aspect-ratio: 16 / 10; }
+}
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .project-card {
+    transform: none;
+    transition: box-shadow .25s ease;
+  }
+  .project-card:active { transform: none; }
+  .project-visual > img { transition: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-card:hover .project-visual > img { transform: none; }
 }
 </style>
