@@ -1,19 +1,27 @@
 <script setup>
-import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref } from 'vue'
+import AmbientLines from './components/AmbientLines.vue'
 import SiteHeader from './components/SiteHeader.vue'
 import SiteFooter from './components/SiteFooter.vue'
+import HomeView from './views/HomeView.vue'
+import AboutView from './views/AboutView.vue'
+import SkillsView from './views/SkillsView.vue'
+import ProjectsView from './views/ProjectsView.vue'
+import ContactView from './views/ContactView.vue'
 
-const route = useRoute()
-const titles = { '/': 'Chad Gys — Front-end Developer', '/about': 'About — Chad Gys', '/skills': 'Skills — Chad Gys', '/contact': 'Contact — Chad Gys' }
-titles['/projects'] = 'Projects - Chad Gys'
 const menuOpen = ref(false)
-watch(() => route.path, (path) => { document.title = titles[path] || titles['/']; menuOpen.value = false }, { immediate: true })
 </script>
 
 <template>
+  <AmbientLines />
   <SiteHeader :menu-open="menuOpen" @toggle-menu="menuOpen = !menuOpen" @navigate="menuOpen = false" />
-  <main><RouterView /></main>
+  <main>
+    <HomeView />
+    <AboutView />
+    <SkillsView />
+    <ProjectsView />
+    <ContactView />
+  </main>
   <SiteFooter />
 </template>
 
@@ -48,6 +56,10 @@ html {
   scroll-behavior: smooth;
 }
 
+main > section[id] {
+  scroll-margin-top: 104px;
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -55,6 +67,11 @@ body {
   color: var(--text);
   font-size: 15px;
   line-height: 1.7;
+}
+
+main, .site-header, .site-footer {
+  position: relative;
+  z-index: 1;
 }
 
 a {
@@ -178,6 +195,9 @@ button, a {
 }
 
 @media (max-width:800px) {
+  main > section[id] {
+    scroll-margin-top: 88px;
+  }
   .hero h1 {
     font-size: clamp(48px,10vw,72px);
     letter-spacing: -3px;

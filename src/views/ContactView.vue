@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, ref } from 'vue'
+import HeadingFlow from '../components/HeadingFlow.vue'
 const form = reactive({ name: '', email: '', message: '' })
 const status = ref('')
 const sending = ref(false)
@@ -7,18 +8,26 @@ async function submitForm(event) {
   sending.value = true
   status.value = ''
   try {
+    const formData = new FormData(event.currentTarget)
+    formData.set('_subject', `New portfolio message from ${form.name}`)
     const response = await fetch('https://formspree.io/f/mjgznprl', {
       method: 'POST',
-      body: new FormData(event.currentTarget),
+      body: formData,
       headers: { Accept: 'application/json' },
     })
-    if (!response.ok) throw new Error('Message submission failed')
+    if (!response.ok) {
+      const result = await response.json().catch(() => null)
+      const errors = result?.errors?.map(({ message }) => message).join(' ')
+      status.value = errors || 'Your message could not be sent. Please try again or email Chad directly.'
+      return
+    }
     status.value = 'Thanks — your message has been sent.'
     form.name = ''
     form.email = ''
     form.message = ''
-  } catch {
-    status.value = 'Sorry, your message could not be sent. Please email gyschad206@email.com directly.'
+  } catch (error) {
+    if (!(error instanceof TypeError)) throw error
+    status.value = 'A network error prevented your message from being sent. Please try again or email Chad directly.'
   } finally {
     sending.value = false
   }
@@ -26,10 +35,28 @@ async function submitForm(event) {
 </script>
 
 <template>
-  <section class="inner-page page-wrap contact-page">
+  <section id="contact" class="inner-page page-wrap contact-page">
     <p class="eyebrow">Contact</p>
-    <div class="contact-layout"><div class="contact-copy"><h1>Get in touch</h1><p class="lead">I'm open to opportunities, collaboration, or questions about my work. Send me a note.</p><a class="contact-email" href="mailto:gyschad206@email.com">gyschad206@email.com <span>↗</span></a><div class="contact-details"><span>Cape Town, South Africa</span><div><a href="https://github.com/Antonio1509" target="_blank" rel="noreferrer">GitHub ↗</a><a href="https://www.linkedin.com/in/chad-gys-421420410" target="_blank" rel="noreferrer">LinkedIn ↗</a></div></div></div>
-      <form class="contact-form" @submit.prevent="submitForm"><label for="name">YOUR NAME</label><input id="name" v-model="form.name" name="name" placeholder="Name" autocomplete="name" required /><label for="email">EMAIL ADDRESS</label><input id="email" v-model="form.email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required /><input type="hidden" name="_replyto" :value="form.email" /><label for="message">WHAT’S ON YOUR MIND?</label><textarea id="message" v-model="form.message" name="message" rows="4" placeholder="A few words about your project..." required></textarea><button class="button button-gold" type="submit" :disabled="sending">{{ sending ? 'Sending…' : 'Send an enquiry ↗' }}</button><p class="form-note" role="status" aria-live="polite">{{ status || 'Your message will be sent directly to Chad.' }}</p></form>
+    <div class="contact-layout">
+      <div class="contact-copy">
+        <HeadingFlow><h1>Let's Connect and Collaborate</h1></HeadingFlow>
+        <div class="contact-details">
+          <div class="contact-detail"><h2>Location</h2><span>Cape Town</span></div>
+          <div class="contact-detail"><h2>Phone</h2><a href="tel:06835863">06835863</a></div>
+          <div class="contact-detail"><h2>Email</h2><a class="contact-email" href="mailto:gyschad206@email.com">gyschad206@email.com <span>↗</span></a></div>
+        </div>
+      </div>
+      <form class="contact-form" action="https://formspree.io/f/mjgznprl" method="POST" @submit.prevent="submitForm">
+        <label for="name">Full Name *</label>
+        <input id="name" v-model="form.name" name="name" placeholder="Full Name" autocomplete="name" required />
+        <label for="email">Email *</label>
+        <input id="email" v-model="form.email" name="email" type="email" placeholder="Email" autocomplete="email" required />
+        <input type="hidden" name="_replyto" :value="form.email" />
+        <label for="message">Message *</label>
+        <textarea id="message" v-model="form.message" name="message" rows="4" placeholder="Message" required></textarea>
+        <button class="button button-gold" type="submit" :disabled="sending">{{ sending ? 'Sending…' : 'Submit' }}</button>
+        <p class="form-note" role="status" aria-live="polite">{{ status || 'Your message will be sent directly to Chad.' }}</p>
+      </form>
     </div>
   </section>
 </template>
@@ -40,10 +67,6 @@ async function submitForm(event) {
   grid-template-columns: 1.05fr .85fr;
   gap: 12%;
   margin-top: 48px;
-}
-
-.contact-copy .lead {
-  max-width: 390px;
 }
 
 .contact-email {
@@ -63,19 +86,20 @@ async function submitForm(event) {
 .contact-details {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 20px;
   margin-top: 35px;
   font-size: 11px;
   color: #88867f;
 }
 
-.contact-details div {
-  display: flex;
-  gap: 24px;
+.contact-detail h2 {
+  margin: 0 0 3px;
+  color: var(--text);
+  font: 500 14px var(--display);
 }
 
-.contact-details a {
-  color: #d6d3cd;
+.contact-detail > span, .contact-detail > a:not(.contact-email) {
+  color: #88867f;
 }
 
 .contact-details a:hover {

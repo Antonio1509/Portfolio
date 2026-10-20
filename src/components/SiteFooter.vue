@@ -4,9 +4,8 @@ const year = new Date().getFullYear()
 
 <template>
   <footer class="site-footer">
-    <RouterLink class="footer-brand" to="/">Chad<span>Gys</span></RouterLink>
-    <p>Made in Cape Town by Chad Gys.</p>
-    <div class="footer-meta"><span>© {{ year }} Chad Gys</span><span>Cape Town, South Africa</span><a href="mailto:gyschad206@email.com">Email ↗</a></div>
+    <a class="footer-brand" href="#home">Chad<span>Gys</span></a>
+    <p>Copyright © {{ year }} Chad Gys | Portfolio</p>
   </footer>
 </template>
 
@@ -17,7 +16,7 @@ const year = new Date().getFullYear()
   width: min(1120px,88%);
   margin: auto;
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: 1fr auto;
   align-items: center;
   gap: 20px;
   color: #777671;
@@ -33,43 +32,17 @@ const year = new Date().getFullYear()
   margin: 0;
 }
 
-.footer-meta {
-  display: flex;
-  gap: 22px;
-  align-items: center;
-  font-size: 11px;
-}
-
-.footer-meta a {
-  color: var(--gold);
-}
-
 @media (max-width:800px) {
   .site-footer {
     grid-template-columns: 1fr auto;
     padding-block: 25px;
     gap: 8px;
   }
-  .site-footer>p {
-    grid-column: 1;
-    grid-row: 2;
-  }
-  .footer-meta {
-    grid-column: 1/-1;
-    justify-content: space-between;
-    gap: 10px;
-    padding-top: 14px;
-    border-top: 1px solid var(--line);
-    margin-top: 10px;
-  }
 }
 
 @media (max-width:430px) {
   .site-footer {
     width: 88%;
-  }
-  .footer-meta {
-    font-size: 8px;
   }
 }
 </style>

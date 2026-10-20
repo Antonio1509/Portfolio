@@ -1,4 +1,6 @@
 <script setup>
+import HeadingFlow from '../components/HeadingFlow.vue'
+
 const skills = [
   { name: 'HTML', detail: 'Semantic page structure and form controls used across my websites.', stage: 'In use' },
   { name: 'CSS', detail: 'Responsive layouts and visual styling with Flexbox, Grid, and media queries.', stage: 'In use' },
@@ -19,10 +21,10 @@ const skills = [
 </script>
 
 <template>
-  <section class="inner-page page-wrap">
+  <section id="skills" class="inner-page page-wrap">
     <p class="eyebrow">Skills</p>
     <div class="inner-heading">
-      <h1>What I've used</h1>
+      <HeadingFlow><h1>What I've used</h1></HeadingFlow>
       <p class="lead">Skills shown in my projects, along with the tools and concepts I'm still learning.</p>
     </div>
     <div class="skills-list">

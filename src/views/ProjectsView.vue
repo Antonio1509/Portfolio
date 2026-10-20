@@ -1,4 +1,5 @@
 <script setup>
+import HeadingFlow from '../components/HeadingFlow.vue'
 import portfolioScreenshot from '../assets/projects/portfolio-home.jpg'
 import foodFestHomepage from '../assets/projects/food-fest-home.jpg'
 import ecommerceHomepage from '../assets/projects/ecommerce-home.jpg'
@@ -75,10 +76,10 @@ const projects = [
 </script>
 
 <template>
-  <section class="projects-page inner-page page-wrap">
+  <section id="projects" class="projects-page inner-page page-wrap">
     <p class="eyebrow">Selected work</p>
     <div class="inner-heading">
-      <h1>Projects I've worked on</h1>
+      <HeadingFlow><h1>Projects I've worked on</h1></HeadingFlow>
       <p class="lead">A selection of coursework and personal projects. Open a repository to explore its code.</p>
     </div>
 

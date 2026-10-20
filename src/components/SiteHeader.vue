@@ -1,16 +1,15 @@
 <script setup>
 defineProps({ menuOpen: Boolean })
 defineEmits(['toggle-menu', 'navigate'])
-const links = [{ to: '/', label: 'Home' }, { to: '/about', label: 'About' }, { to: '/projects', label: 'Projects' }, { to: '/skills', label: 'Skills' }]
+const links = [{ to: '#home', label: 'Home' }, { to: '#about', label: 'About' }, { to: '#skills', label: 'Skills' }, { to: '#projects', label: 'Projects' }, { to: '#contact', label: 'Contact' }]
 </script>
 
 <template>
   <header class="site-header">
-    <RouterLink class="brand" to="/" @click="$emit('navigate')" aria-label="Chad Gys home"><span class="brand-mark"><img class="brand-image" src="/src/assets/cg-monogram.png" alt="" /></span><span class="brand-name">CHAD<span>GYS</span></span></RouterLink>
+    <a class="brand" href="#home" @click="$emit('navigate')" aria-label="Chad Gys home"><span class="brand-mark"><img class="brand-image" src="/src/assets/cg-monogram.png" alt="" /></span><span class="brand-name">CHAD<span>GYS</span></span></a>
     <button class="menu-toggle" type="button" :aria-expanded="menuOpen" aria-label="Toggle navigation" @click="$emit('toggle-menu')"><span></span><span></span></button>
     <nav class="nav-links" :class="{ open: menuOpen }" aria-label="Main navigation">
-      <RouterLink v-for="link in links" :key="link.to" :to="link.to" @click="$emit('navigate')">{{ link.label }}</RouterLink>
-      <RouterLink class="nav-cta" to="/contact" @click="$emit('navigate')">Let’s talk <span>↗</span></RouterLink>
+      <a v-for="link in links" :key="link.to" :href="link.to" @click="$emit('navigate')">{{ link.label }}</a>
     </nav>
   </header>
 </template>
@@ -75,20 +74,8 @@ const links = [{ to: '/', label: 'Home' }, { to: '/about', label: 'About' }, { t
   transition: color .2s;
 }
 
-.nav-links>a:hover, .nav-links>a.router-link-exact-active {
+.nav-links>a:hover, .nav-links>a:focus-visible {
   color: var(--gold-bright);
-}
-
-.nav-links .nav-cta {
-  color: var(--text);
-  border: 1px solid #45433e;
-  padding: 10px 16px;
-  border-radius: 2px;
-}
-
-.nav-cta span {
-  color: var(--gold);
-  margin-left: 9px;
 }
 
 .menu-toggle {

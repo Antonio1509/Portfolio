@@ -12,10 +12,10 @@ This portfolio is an online introduction and evolving record of my software deve
 - Responsive layouts for desktop and mobile screens.
 - Reusable navigation and footer components shared across the site.
 - Dark theme, gold accents, and the CG monogram used as the site logo and favicon.
-- Projects page featuring seven projects with links to their GitHub repositories.
-- Skills described with examples from project code and programming exercises.
+- Projects page featuring the Web Scraping Dashboard, Property Mini Listings, and LocalCart Marketplace, with project links.
+- Skills grouped into frontend, tools, and backend technologies.
 - Contact form with browser validation and asynchronous Formspree submission, including sending, success, and error states.
-- Email, GitHub, and LinkedIn links.
+- Location, phone, and email contact details.
 
 ## Built with
 
@@ -57,6 +57,7 @@ The contact form posts to the Formspree endpoint configured in `src/views/Contac
     |-- main.js                # Vue app entry point
     |-- assets/
     |   |-- cg-monogram.png    # Monogram logo and browser tab icon
+    |   |-- about-portrait.jpg # About page portrait
     |   `-- projects/
     |       |-- food-fest-tickets.jpg # Ticket page preview on the home page
     |       |-- portfolio-home.jpg

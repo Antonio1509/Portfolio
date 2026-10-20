@@ -1,19 +1,31 @@
 <script setup>
+import portrait from '../assets/about-portrait.jpg'
+import HeadingFlow from '../components/HeadingFlow.vue'
+
 const aboutParagraphs = [
-  "I'm studying software development at Life Choices Academy. I use the exercises and small projects I build to practise what I'm learning and see where I need more work.",
-  "My recent work includes Vue pages, JavaScript interactions, and an Express API. I'm still learning, and I try to make each project a little better than the last.",
-  'Away from the computer, I like gaming and playing piano.',
+  "Hi, I'm Chad, a software development student at Life Choices Academy in Cape Town. I always loved coding, and what made me love it more is when I learned how to build a full page and viewing it on the browser.",
+  'I learn by building. And I build with others. My team andI created a Web Scraping dashboard with Flask API and a Vue frontend, aswell as a multi-vendor marketplace with a cart, checkout and order tracking. I plan on learning more about backend as i already know the basics about it.',
+  "Each project taught me somethingI didn't know when i started, and working as a team taught me how to plan, share the work and how to solve problems together.",
+  'Currently I am learning how to use WordPress. And a strength of mine that was shared to me by others was the ability to take lead in situations where nobody would want to take lead, to guide and lead the team into solving problems and working our way to deadline without any problems. I am always open to new challenges and to learn from it.',
+  'I am looking for a internship or junior role in frontend where i can contribute to real products and learn from experienced developers.',
+  "Outside of coding, you'll find me playing football and even the piano. I enjoy gaming as well.",
 ]
 </script>
 
 <template>
-  <section class="inner-page page-wrap">
+  <section id="about" class="inner-page page-wrap">
     <p class="eyebrow">About</p>
-    <div class="inner-heading"><h1>A bit about me</h1>
-      <p class="lead">I'm a software development trainee at Life Choices Academy, learning by building and improving real projects.</p></div>
-    <div class="about-grid"><div class="about-art"><div class="about-image"><img src="https://i.ibb.co/392MSHtk/IMG-1217.jpg" alt="Portrait of Chad Gys" /></div></div>
-      <div class="about-copy"><p v-for="paragraph in aboutParagraphs" :key="paragraph">{{ paragraph }}</p>
-            <RouterLink class="text-link" to="/contact">Say hello <span>→</span></RouterLink></div></div>
+    <div class="inner-heading"><HeadingFlow><h1>My Journey</h1></HeadingFlow>
+      <p class="lead">Building real products, one project at a time.</p></div>
+    <div class="about-grid">
+      <div class="about-art"><div class="about-image"><img :src="portrait" alt="Portrait of Chad Gys" /></div></div>
+      <div class="about-copy">
+        <p v-for="paragraph in aboutParagraphs" :key="paragraph">{{ paragraph }}</p>
+        <p class="quick-facts-title">Quick facts:</p>
+        <p>Based in Cape Town, Studying Software Development, Open to Internships.</p>
+        <a class="text-link" href="#contact">Let's Connect and Collaborate <span>→</span></a>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -30,6 +42,7 @@ const aboutParagraphs = [
 .about-art {
   position: relative;
   max-width: 355px;
+  transform: translateY(-40px);
 }
 
 .about-image {
@@ -45,8 +58,7 @@ const aboutParagraphs = [
   height: 100%;
   object-fit: cover;
   object-position: center 36%;
-  filter: grayscale(1) sepia(.15) brightness(.72);
- }
+}
 
 .about-copy {
   max-width: 550px;
@@ -57,6 +69,10 @@ const aboutParagraphs = [
 
 .about-copy p {
   margin: 0 0 21px;
+}
+
+.about-copy .quick-facts-title {
+  color: var(--text);
 }
 
 .about-copy .text-link {

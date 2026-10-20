@@ -1,31 +1,48 @@
 <script setup>
 import monogram from '../assets/cg-monogram.png'
+import HeadingFlow from '../components/HeadingFlow.vue'
 </script>
 
 <template>
-  <section class="home-hero page-wrap">
+  <section id="home" class="home-hero page-wrap">
     <div class="hero-copy">
-      <p class="home-location">Cape Town, South Africa</p>
-      <h1>Hi, I'm Chad.<br />I learn by <em>building.</em></h1>
+      <div class="hero-greeting">
+        <svg class="hello-bot" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+          <path class="bot-antenna" d="M31 12V7" />
+          <circle class="bot-antenna-tip" cx="31" cy="5" r="2.5" />
+          <rect class="bot-head" x="12" y="14" width="38" height="31" rx="11" />
+          <circle class="bot-eye" cx="24" cy="27" r="2.2" />
+          <circle class="bot-eye" cx="38" cy="27" r="2.2" />
+          <path class="bot-smile" d="M25 35c3.5 4 8.5 4 12 0" />
+          <path class="bot-body" d="M20 46v5c0 2 1.5 3.5 3.5 3.5h15c2 0 3.5-1.5 3.5-3.5v-5" />
+          <path class="bot-arm" d="M12 29H7c-1.5 0-2.5 1-2.5 2.5V37" />
+          <g class="bot-wave">
+            <path d="M50 29h4c1.5 0 2.5-1 2.5-2.5V22" />
+            <path d="M56.5 22v-5" />
+          </g>
+        </svg>
+        <HeadingFlow><h1>Hi! I'm Chad<br />Welcome to my portfolio</h1></HeadingFlow>
+      </div>
       <p class="hero-intro">
-        I'm a software development trainee at Life Choices Academy. This site is where I share what I've learned and the projects I've built.
+        Software development student at Life Choices Academy | Cape Town<br />
+        Open to internships and learning opportunities.
       </p>
       <div class="hero-actions">
-        <RouterLink class="button button-gold" to="/projects">See my projects <span>→</span></RouterLink>
-        <RouterLink class="text-link" to="/about">About me <span>→</span></RouterLink>
+        <a class="button button-gold" href="#projects">Explore My Work <span>→</span></a>
+        <a class="text-link" href="#about">About <span>→</span></a>
       </div>
     </div>
 
     <article class="featured-project">
-      <RouterLink class="featured-image" to="/projects" aria-label="Browse Chad Gys projects">
+      <a class="featured-image" href="#projects" aria-label="Browse Chad Gys projects">
         <img :src="monogram" alt="CG gold monogram logo" />
-      </RouterLink>
+      </a>
       <div class="featured-caption">
         <div>
-          <p class="eyebrow">My mark</p>
-          <h2>Chad Gys</h2>
+          <p class="eyebrow">My Journey</p>
+          <h2>Building real products, one project at a time.</h2>
         </div>
-        <RouterLink class="text-link" to="/projects">More projects <span>→</span></RouterLink>
+        <a class="text-link" href="#projects">Explore My Work <span>→</span></a>
       </div>
     </article>
   </section>
@@ -46,16 +63,58 @@ import monogram from '../assets/cg-monogram.png'
   max-width: 520px;
 }
 
-.home-location {
-  color: var(--gold);
-  font-size: 14px;
-  margin: 0 0 22px;
+.hero-greeting {
+  width: fit-content;
+}
+
+.hello-bot {
+  display: block;
+  width: 55px;
+  height: 55px;
+  margin: 0 0 5px 4px;
+  overflow: visible;
+}
+
+.bot-head {
+  fill: #151515;
+  stroke: var(--gold);
+  stroke-width: 2;
+}
+
+.bot-antenna, .bot-smile, .bot-body, .bot-arm, .bot-wave path {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bot-antenna-tip, .bot-eye {
+  fill: var(--gold);
+}
+
+.bot-wave {
+  transform-box: view-box;
+  transform-origin: 50px 31px;
+  animation: bot-wave 1.8s ease-in-out infinite;
+}
+
+@keyframes bot-wave {
+  0%, 100% { transform: rotate(0); }
+  20%, 55% { transform: rotate(-24deg); }
+  38%, 73% { transform: rotate(4deg); }
 }
 
 .hero-copy h1 {
   font: 600 clamp(46px, 6.2vw, 72px)/1.12 var(--display);
   letter-spacing: -3px;
   margin: 0 0 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bot-wave {
+    animation: none;
+  }
 }
 
 .hero-copy h1 em {
