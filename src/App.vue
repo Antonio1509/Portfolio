@@ -196,7 +196,12 @@ button, a {
 
 #netlify-badge,
 #nl-badge,
+[id*="netlify" i],
+[class*="netlify" i],
 [data-netlify-badge],
+[aria-label*="netlify" i],
+netlify-badge,
+a[href*="netlify.com" i],
 iframe[title*="Netlify" i],
 iframe[src*="netlify" i] {
   display: none !important;
