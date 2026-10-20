@@ -194,8 +194,12 @@ button, a {
   outline-color: transparent;
 }
 
-button#nl-badge {
-  display: none;
+#netlify-badge,
+#nl-badge,
+[data-netlify-badge],
+iframe[title*="Netlify" i],
+iframe[src*="netlify" i] {
+  display: none !important;
 }
 
 @media (max-width:800px) {
