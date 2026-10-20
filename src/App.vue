@@ -194,6 +194,10 @@ button, a {
   outline-color: transparent;
 }
 
+button#nl-badge {
+  display: none;
+}
+
 @media (max-width:800px) {
   main > section[id] {
     scroll-margin-top: 88px;

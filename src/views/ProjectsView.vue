@@ -12,7 +12,7 @@ const projects = [
   {
     name: 'My Portfolio',
     kind: 'Personal project - This website',
-    description: 'My portfolio, built with Vue single-file components and Vue Router, with shared site components and responsive styling.',
+    description: 'My portfolio, built with Vue single-file components and Vue Router, with shared site components and responsive styling. Built as a team',
     technologies: ['Vue 3', 'Vue Router', 'CSS'],
     image: portfolioScreenshot,
     imageAlt: 'Screenshot of the portfolio homepage',
@@ -30,7 +30,7 @@ const projects = [
   {
     name: 'LocalCart Marketplace',
     kind: 'Collaborative project - Module 3',
-    description: 'A multi-vendor marketplace for South African makers, with product browsing, vendor storefronts, a shopping cart, checkout, and order tracking.',
+    description: 'A multi-vendor marketplace for South African makers, with product browsing, vendor storefronts, a shopping cart, checkout, and order tracking. Built as a team',
     technologies: ['Vue 3', 'JavaScript', 'CSS'],
     image: ecommerceHomepage,
     imageAlt: 'Screenshot of the LocalCart e-commerce homepage',
@@ -39,7 +39,7 @@ const projects = [
   {
     name: 'Web Scraping Dashboard',
     kind: 'Dashboard - Python and Vue',
-    description: 'A dashboard for collecting and reviewing retail product and digital asset data, with a Flask API and a Vue interface.',
+    description: 'A dashboard for collecting and reviewing retail product and digital asset data, with a Flask API and a Vue interface. Built as a team',
     technologies: ['Python', 'Flask', 'Vue 3', 'Pinia'],
     image: dashboardHomepage,
     imageAlt: 'Screenshot of the Market Pulse scraping dashboard homepage',
@@ -48,7 +48,7 @@ const projects = [
   {
     name: 'HR Dashboard Management System',
     kind: 'Collaborative project - Module 1',
-    description: 'An HR dashboard for employee records, attendance, payroll, and leave management, built as a Module 1 project.',
+    description: 'An HR dashboard for employee records, attendance, payroll, and leave management, built as a Module 1 project. Built as a team',
     technologies: [],
     image: hrHomepage,
     imageAlt: 'Screenshot of the ModernTech HR dashboard homepage',
@@ -57,7 +57,7 @@ const projects = [
   {
     name: 'Pet Care',
     kind: 'Multi-page website',
-    description: 'A pet care website with separate home, services, about, contact, login, and signup pages, styled with shared CSS.',
+    description: 'A pet care website with separate home, services, about, contact, login, and signup pages, styled with shared CSS. Built as a team',
     technologies: ['HTML', 'CSS', 'JavaScript'],
     image: petCareHomepage,
     imageAlt: 'Screenshot of the Pet Care homepage with its video hero',
