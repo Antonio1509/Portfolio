@@ -6,7 +6,8 @@
         :key="strand"
         class="heading-flow-strand"
         :class="`strand-${strand}`"
-        :d="`M18 ${92 + strand * 2} C5 ${45 + strand * 2} 20 ${18 + strand * 2} 75 ${18 + strand * 2} C300 ${10 + strand * 2} 700 ${10 + strand * 2} 925 ${18 + strand * 2} C980 ${18 + strand * 2} 995 ${45 + strand * 2} 982 ${85 + strand * 2} C975 ${115 + strand * 2} 945 ${126 + strand * 2} 900 ${126 + strand * 2} C650 ${135 + strand * 2} 320 ${116 + strand * 2} 85 ${126 + strand * 2} C35 ${128 + strand * 2} 13 ${112 + strand * 2} 18 ${92 + strand * 2} C21 ${125 + strand * 2} 36 ${158 + strand * 2} 58 198`"
+        :transform="`translate(0 ${(strand - 1) * 3})`"
+        d="M18 100C-15 60 20 0 95 15C180 35 140 80 240 38C330-5 310 25 450 20C610 15 560-5 725 16C875 30 825 0 925 17C1005 32 995 88 970 102C940 132 995 152 910 146C790 132 845 102 700 134C555 166 580 116 440 138C300 160 355 110 210 144C90 163 135 133 50 145C12 130 0 110 18 100C26 140 42 168 58 198"
       />
     </svg>
     <slot />
@@ -35,19 +36,19 @@
 .heading-flow-strand {
   fill: none;
   stroke: var(--gold);
-  stroke-width: 1;
-  stroke-dasharray: 155 20;
-  opacity: .15;
-  animation: heading-flow 18s linear infinite;
+  stroke-width: 1.1;
+  stroke-dasharray: 210 18;
+  opacity: .2;
+  animation: heading-flow 16s linear infinite;
 }
 
-.strand-2 { animation-delay: -0.45s; opacity: .13; }
-.strand-3 { animation-delay: -0.9s; opacity: .11; }
-.strand-4 { animation-delay: -1.35s; opacity: .09; }
-.strand-5 { animation-delay: -1.8s; opacity: .07; }
+.strand-2 { animation-delay: -0.4s; opacity: .17; }
+.strand-3 { animation-delay: -0.8s; opacity: .14; }
+.strand-4 { animation-delay: -1.2s; opacity: .11; }
+.strand-5 { animation-delay: -1.6s; opacity: .08; }
 
 @keyframes heading-flow {
-  to { stroke-dashoffset: -1750; }
+  to { stroke-dashoffset: -2280; }
 }
 
 @media (prefers-reduced-motion: reduce) {
