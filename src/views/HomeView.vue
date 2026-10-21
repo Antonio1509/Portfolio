@@ -19,13 +19,16 @@ onMounted(() => {
       stagger: 0.12,
       ease: 'power4.out',
     })
-    intro.to('.bot-wave', {
-      rotation: -24,
-      transformOrigin: '50px 31px',
-      duration: 0.2,
-      ease: 'power1.inOut',
+    intro.fromTo('.bot-wave', {
+      rotation: -8,
+      svgOrigin: '50 29',
+    }, {
+      rotation: 28,
+      duration: 0.7,
+      ease: 'sine.inOut',
       repeat: -1,
       yoyo: true,
+      repeatDelay: 0.12,
     }, 0.15)
     gsap.to('.hello-bot', {
       y: -2,
