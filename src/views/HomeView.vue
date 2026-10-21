@@ -24,7 +24,7 @@ onMounted(() => {
       transformOrigin: '50px 31px',
       duration: 0.2,
       ease: 'power1.inOut',
-      repeat: 3,
+      repeat: -1,
       yoyo: true,
     }, 0.15)
     gsap.to('.hello-bot', {
