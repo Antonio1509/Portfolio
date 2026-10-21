@@ -17,6 +17,7 @@ const projects = [
     image: portfolioScreenshot,
     imageAlt: 'Screenshot of the portfolio homepage',
     href: 'https://github.com/Antonio1509/Portfolio',
+    liveHref: 'https://cgpersonalportfolio.netlify.app/',
   },
   {
     name: 'Cape Town Food Fest',
@@ -44,6 +45,7 @@ const projects = [
     image: dashboardHomepage,
     imageAlt: 'Screenshot of the Market Pulse scraping dashboard homepage',
     href: 'https://github.com/adamjattiem12-gif/-Flask-Web-Scraping-Dashboard',
+    liveHref: 'https://market-pulse-11gq.onrender.com/',
   },
   {
     name: 'HR Dashboard Management System',
@@ -84,9 +86,14 @@ const projects = [
     </div>
 
     <div class="projects-grid">
-      <article v-for="(project, index) in projects" :key="project.name" v-reveal="index" v-tilt class="project-card">
+      <article v-for="(project, index) in projects" :key="project.name" v-reveal="index" v-tilt v-project-motion class="project-card">
         <div class="project-visual">
-          <img :src="project.image" :alt="project.imageAlt" loading="lazy" />
+          <div class="project-image-parallax">
+            <img :src="project.image" :alt="project.imageAlt" loading="lazy" />
+          </div>
+          <a class="project-view" :href="project.liveHref || project.href" target="_blank" rel="noopener noreferrer">
+            {{ project.liveHref ? 'View live site' : 'View project' }} <span aria-hidden="true">&rarr;</span>
+          </a>
         </div>
 
         <div class="project-details">
@@ -97,6 +104,16 @@ const projects = [
             <li v-for="technology in project.technologies" :key="technology">{{ technology }}</li>
           </ul>
           <div class="project-links">
+            <a
+              v-if="project.liveHref"
+              v-magnetic
+              class="project-live-link"
+              :href="project.liveHref"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Live site <span aria-hidden="true">&rarr;</span>
+            </a>
             <a v-magnetic :href="project.href" target="_blank" rel="noopener noreferrer">View GitHub repository <span aria-hidden="true">&rarr;</span></a>
           </div>
         </div>
@@ -116,11 +133,23 @@ const projects = [
 }
 .project-card {
   min-width: 0;
+  position: relative;
   border: 1px solid var(--line);
   background: #111214;
   transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(var(--card-lift, 0));
-  transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease, border-color .35s ease;
+  transition: transform .35s cubic-bezier(.22,1,.36,1);
   transform-style: preserve-3d;
+}
+.project-card::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  border: 1px solid rgba(213,181,121,.5);
+  opacity: 0;
+  transform: scale(.985);
+  transition: opacity .45s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1);
+  pointer-events: none;
 }
 .project-visual { position: relative; width: 100%; aspect-ratio: 16 / 10; overflow: hidden; background: #171717; }
 .project-visual::after {
@@ -129,56 +158,114 @@ const projects = [
   inset: 0;
   opacity: 0;
   pointer-events: none;
-  background: linear-gradient(135deg, rgba(213,181,121,.1), transparent 55%);
-  transition: opacity .35s ease;
+  background: radial-gradient(260px circle at var(--x, 50%) var(--y, 50%), rgba(213,181,121,.16), transparent 75%);
+  transition: opacity .4s cubic-bezier(.22,1,.36,1);
 }
-.project-visual > img {
+.project-image-parallax {
+  position: absolute;
+  top: -6%;
+  left: 0;
+  width: 100%;
+  height: 112%;
+}
+.project-image-parallax img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  transition: transform .4s cubic-bezier(.2,.7,.2,1);
+  transition: transform .8s cubic-bezier(.22,1,.36,1);
+}
+.project-view {
+  position: absolute;
+  z-index: 1;
+  left: 18px;
+  bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  font-size: 12px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .4s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1);
+}
+.project-view span {
+  color: var(--gold);
+  transition: transform .35s cubic-bezier(.22,1,.36,1);
 }
 .project-links a {
   display: inline-block;
-  transition: color .25s ease, transform .25s ease;
+  transition: transform .35s cubic-bezier(.22,1,.36,1);
 }
 .project-card:active { transform: perspective(900px) scale(.99); }
-.project-card:hover {
-  --card-lift: -7px;
-  box-shadow: 0 18px 42px rgba(0,0,0,.28);
-  border-color: rgba(213,181,121,.3);
-}
-.project-card:hover .project-visual::after { opacity: 1; }
-.project-card:hover .project-visual > img { transform: scale(1.03); }
-.project-card:hover .project-links a { transform: translateY(-2px); }
-.project-card:hover .project-links a.magnetic.is-magnetic {
-  transform: translate3d(var(--mag-x, 0), calc(var(--mag-y, 0px) - 2px), 0);
-}
 .project-details { padding: 22px 25px 24px; }
 .project-kind { margin: 0 0 9px; color: #c7aa72; font: 10px var(--mono); letter-spacing: .07em; text-transform: uppercase; }
 .project-details h2 { margin: 0 0 9px; font: 500 21px var(--display); }
 .project-description { margin: 0; color: #aaa9a4; font-size: 13px; line-height: 1.75; }
 .project-tech { display: flex; flex-wrap: wrap; gap: 7px 16px; margin: 15px 0 0; padding: 0; list-style: none; color: #d2c4a5; font-size: 11px; }
-.project-links { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--line); }
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-top: 18px;
+  padding-top: 13px;
+  border-top: 1px solid var(--line);
+}
 .project-links a { color: var(--text); font-size: 12px; }
-.project-links a:hover { color: var(--gold-bright); }
 .project-links span { margin-left: 5px; color: var(--gold); }
+.project-links .project-live-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--gold);
+  color: var(--gold-bright);
+}
+.project-links .project-live-link span { margin: 0; }
+@media (hover: hover) and (pointer: fine) {
+  .project-links a:hover { color: var(--gold-bright); }
+  .project-links .project-live-link:hover { background: rgba(213,181,121,.1); }
+  .project-card:hover {
+    --card-lift: -7px;
+    box-shadow: 0 18px 42px rgba(0,0,0,.28);
+    border-color: rgba(213,181,121,.3);
+  }
+  .project-card:hover::before { opacity: 1; transform: scale(1); }
+  .project-card:hover .project-visual::after { opacity: 1; }
+  .project-card:hover .project-image-parallax img { transform: scale(1.05); }
+  .project-card:hover .project-view,
+  .project-card:focus-within .project-view { opacity: 1; transform: translateY(0); }
+  .project-card:hover .project-view span { transform: translateX(4px); }
+  .project-card:hover .project-links a { transform: translateY(-2px); }
+  .project-card:hover .project-links a.magnetic.is-magnetic {
+    transform: translate3d(var(--mag-x, 0), calc(var(--mag-y, 0px) - 2px), 0);
+  }
+}
 @media (max-width: 760px) {
   .projects-page { padding-top: 46px; }
   .projects-grid { grid-template-columns: 1fr; gap: 20px; }
   .project-visual { aspect-ratio: 16 / 10; }
 }
-@media (hover: none), (prefers-reduced-motion: reduce) {
-  .project-card {
-    transform: none;
-    transition: box-shadow .25s ease;
-  }
-  .project-card:active { transform: none; }
-  .project-visual > img { transition: none; }
+@media (min-width: 761px) {
+  .project-card:nth-child(even) { margin-top: 24px; }
+}
+@media (hover: none) {
+  .project-view { opacity: 1; transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .project-card:hover .project-visual > img { transform: none; }
+  .project-card {
+    transform: none;
+    transition: none;
+    box-shadow: none;
+  }
+  .project-card:active { transform: none; }
+  .project-card::before, .project-view, .project-view span,
+  .project-image-parallax img { transition: none; }
+  .project-card:hover { --card-lift: 0; }
+  .project-card:hover .project-image-parallax img,
+  .project-card:hover .project-view { transform: none; }
+  .project-visual::after { display: none; }
 }
 </style>

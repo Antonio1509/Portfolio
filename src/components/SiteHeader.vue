@@ -1,15 +1,66 @@
 <script setup>
-defineProps({ menuOpen: Boolean })
-defineEmits(['toggle-menu', 'navigate'])
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { gsap } from 'gsap'
+import { isReducedMotion } from '../utils/animations'
+
+const props = defineProps({ menuOpen: Boolean, activeSection: { type: String, default: 'home' } })
+const emit = defineEmits(['toggle-menu', 'navigate', 'section-change'])
 const links = [{ to: '#home', label: 'Home' }, { to: '#about', label: 'About' }, { to: '#skills', label: 'Skills' }, { to: '#projects', label: 'Projects' }, { to: '#contact', label: 'Contact' }]
+const nav = ref(null)
+const indicator = ref(null)
+let resizeHandler
+
+function moveIndicator(animate = true) {
+  const activeLink = nav.value?.querySelector(`a[href="#${props.activeSection}"]`)
+  if (!activeLink || !indicator.value) return
+  const x = activeLink.offsetLeft
+  const width = activeLink.offsetWidth
+  const y = activeLink.offsetTop + activeLink.offsetHeight + 2
+  gsap.to(indicator.value, {
+    x,
+    y,
+    scaleX: width,
+    duration: animate && !isReducedMotion() ? 0.5 : 0,
+    ease: 'power3.out',
+    overwrite: true,
+  })
+}
+
+function selectSection(target) {
+  emit('section-change', target.slice(1))
+  emit('navigate')
+}
+
+watch(() => [props.activeSection, props.menuOpen], async () => {
+  await nextTick()
+  moveIndicator()
+})
+
+onMounted(() => {
+  nextTick(() => moveIndicator(false))
+  resizeHandler = () => moveIndicator(false)
+  window.addEventListener('resize', resizeHandler, { passive: true })
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', resizeHandler)
+  if (indicator.value) gsap.killTweensOf(indicator.value)
+})
 </script>
 
 <template>
   <header class="site-header">
     <a class="brand" href="#home" @click="$emit('navigate')" aria-label="Chad Gys home"><span class="brand-mark"><img class="brand-image" src="/src/assets/cg-monogram.png" alt="" /></span><span class="brand-name">CHAD<span>GYS</span></span></a>
     <button class="menu-toggle" type="button" :aria-expanded="menuOpen" aria-label="Toggle navigation" @click="$emit('toggle-menu')"><span></span><span></span></button>
-    <nav class="nav-links" :class="{ open: menuOpen }" aria-label="Main navigation">
-      <a v-for="link in links" :key="link.to" :href="link.to" @click="$emit('navigate')">{{ link.label }}</a>
+    <nav ref="nav" class="nav-links" :class="{ open: menuOpen }" aria-label="Main navigation">
+      <a
+        v-for="link in links"
+        :key="link.to"
+        :href="link.to"
+        :class="{ active: activeSection === link.to.slice(1) }"
+        @click="selectSection(link.to)"
+      >{{ link.label }}</a>
+      <span ref="indicator" class="nav-indicator" aria-hidden="true"></span>
     </nav>
   </header>
 </template>
@@ -63,6 +114,7 @@ const links = [{ to: '#home', label: 'Home' }, { to: '#about', label: 'About' },
 }
 
 .nav-links {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 36px;
@@ -71,11 +123,26 @@ const links = [{ to: '#home', label: 'Home' }, { to: '#about', label: 'About' },
 .nav-links>a {
   font-size: 13px;
   color: #aaa9a4;
-  transition: color .2s;
 }
 
-.nav-links>a:hover, .nav-links>a:focus-visible {
+.nav-links>a:focus-visible, .nav-links>a.active {
   color: var(--gold-bright);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-links>a:hover { color: var(--gold-bright); }
+}
+
+.nav-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
 }
 
 .menu-toggle {

@@ -1,11 +1,15 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { onBeforeUnmount, reactive, ref } from 'vue'
 import HeadingFlow from '../components/HeadingFlow.vue'
 const form = reactive({ name: '', email: '', message: '' })
 const status = ref('')
-const sending = ref(false)
+const formState = ref('idle')
+const toastMessage = ref('')
+let toastTimer
+
 async function submitForm(event) {
-  sending.value = true
+  if (formState.value === 'loading') return
+  formState.value = 'loading'
   status.value = ''
   try {
     const formData = new FormData(event.currentTarget)
@@ -18,20 +22,42 @@ async function submitForm(event) {
     if (!response.ok) {
       const result = await response.json().catch(() => null)
       const errors = result?.errors?.map(({ message }) => message).join(' ')
+      formState.value = 'error'
       status.value = errors || 'Your message could not be sent. Please try again or email Chad directly.'
       return
     }
+    formState.value = 'success'
     status.value = 'Thanks — your message has been sent.'
     form.name = ''
     form.email = ''
     form.message = ''
   } catch (error) {
-    if (!(error instanceof TypeError)) throw error
+    formState.value = 'error'
+    if (!(error instanceof TypeError)) {
+      status.value = 'An unexpected error occurred. Please try again or email Chad directly.'
+      throw error
+    }
     status.value = 'A network error prevented your message from being sent. Please try again or email Chad directly.'
-  } finally {
-    sending.value = false
   }
 }
+
+async function copyEmail(event) {
+  event.preventDefault()
+  try {
+    await navigator.clipboard.writeText('gyschad206@email.com')
+    toastMessage.value = 'Copied'
+    window.clearTimeout(toastTimer)
+    toastTimer = window.setTimeout(() => { toastMessage.value = '' }, 1800)
+  } catch (error) {
+    if (!(error instanceof DOMException) && !(error instanceof TypeError)) throw error
+    toastMessage.value = 'Copy unavailable — opening email instead.'
+    window.location.href = 'mailto:gyschad206@email.com'
+    window.clearTimeout(toastTimer)
+    toastTimer = window.setTimeout(() => { toastMessage.value = '' }, 3000)
+  }
+}
+
+onBeforeUnmount(() => window.clearTimeout(toastTimer))
 </script>
 
 <template>
@@ -43,18 +69,34 @@ async function submitForm(event) {
         <div class="contact-details">
           <div v-reveal class="contact-detail"><h2>Location</h2><span>Cape Town</span></div>
           <div v-reveal="1" class="contact-detail"><h2>Phone</h2><a href="tel:06835863">06835863</a></div>
-          <div v-reveal="2" class="contact-detail"><h2>Email</h2><a v-magnetic class="contact-email" href="mailto:gyschad206@email.com">gyschad206@email.com <span>↗</span></a></div>
+          <div v-reveal="2" class="contact-detail">
+            <h2>Email</h2>
+            <a v-magnetic class="contact-email" href="mailto:gyschad206@email.com" @click="copyEmail">
+              gyschad206@email.com <span>↗</span>
+            </a>
+            <span v-if="toastMessage" class="copy-toast" role="status" aria-live="polite">{{ toastMessage }}</span>
+          </div>
         </div>
       </div>
       <form v-reveal class="contact-form" action="https://formspree.io/f/mjgznprl" method="POST" @submit.prevent="submitForm">
-        <label for="name">Full Name *</label>
-        <input id="name" v-model="form.name" name="name" placeholder="Full Name" autocomplete="name" required />
-        <label for="email">Email *</label>
-        <input id="email" v-model="form.email" name="email" type="email" placeholder="Email" autocomplete="email" required />
+        <div class="form-field">
+          <label for="name">Full Name *</label>
+          <input id="name" v-model="form.name" name="name" placeholder="Full Name" autocomplete="name" required />
+        </div>
+        <div class="form-field">
+          <label for="email">Email *</label>
+          <input id="email" v-model="form.email" name="email" type="email" placeholder="Email" autocomplete="email" required />
+        </div>
         <input type="hidden" name="_replyto" :value="form.email" />
-        <label for="message">Message *</label>
-        <textarea id="message" v-model="form.message" name="message" rows="4" placeholder="Message" required></textarea>
-        <button v-magnetic class="button button-gold" type="submit" :disabled="sending">{{ sending ? 'Sending…' : 'Submit' }}</button>
+        <div class="form-field">
+          <label for="message">Message *</label>
+          <textarea id="message" v-model="form.message" name="message" rows="4" placeholder="Message" required></textarea>
+        </div>
+        <button v-magnetic class="button button-gold" :class="`is-${formState}`" type="submit" :disabled="formState === 'loading'">
+          <span v-if="formState === 'loading'" class="submit-spinner" aria-hidden="true"></span>
+          <svg v-else-if="formState === 'success'" class="submit-check" viewBox="0 0 16 16" aria-hidden="true"><path d="m3 8 3.2 3.2L13 4.5" /></svg>
+          <span>{{ formState === 'loading' ? 'Sending' : formState === 'success' ? 'Sent' : formState === 'error' ? 'Try again' : 'Submit' }}</span>
+        </button>
         <p class="form-note" role="status" aria-live="polite">{{ status || 'Your message will be sent directly to Chad.' }}</p>
       </form>
     </div>
@@ -81,6 +123,21 @@ async function submitForm(event) {
 
 .contact-email span {
   color: var(--gold);
+  display: inline-block;
+  transition: transform .35s cubic-bezier(.22,1,.36,1);
+}
+
+.copy-toast {
+  display: block;
+  margin-top: 5px;
+  color: var(--gold-bright);
+  font: 10px var(--mono);
+  animation: toast-enter .35s cubic-bezier(.22,1,.36,1) both;
+}
+
+@keyframes toast-enter {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .contact-details {
@@ -102,10 +159,6 @@ async function submitForm(event) {
   color: #88867f;
 }
 
-.contact-details a:hover {
-  color: var(--gold);
-}
-
 .contact-form {
   padding-top: 9px;
   display: flex;
@@ -119,6 +172,29 @@ async function submitForm(event) {
   margin: 0 0 9px;
 }
 
+.form-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 25px;
+}
+
+.form-field::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform .45s cubic-bezier(.22,1,.36,1);
+}
+
+.form-field:focus-within::after { transform: scaleX(1); }
+.form-field:focus-within label { color: var(--gold-bright); }
+
 .contact-form input, .contact-form textarea {
   border: 0;
   border-bottom: 1px solid #393936;
@@ -126,7 +202,7 @@ async function submitForm(event) {
   color: var(--text);
   border-radius: 0;
   padding: 10px 0 14px;
-  margin-bottom: 25px;
+  margin-bottom: 0;
   outline: none;
   resize: vertical;
   font-size: 13px;
@@ -145,8 +221,41 @@ async function submitForm(event) {
   margin-top: 4px;
 }
 
-.contact-form .button {
-  transition: background .2s, transform .28s cubic-bezier(.2,.7,.2,1);
+.submit-spinner {
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgba(23,22,19,.35);
+  border-top-color: #171613;
+  border-radius: 50%;
+  animation: submit-spin .7s linear infinite;
+}
+
+@keyframes submit-spin {
+  to { transform: rotate(360deg); }
+}
+
+.submit-check {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: check-enter .35s cubic-bezier(.22,1,.36,1) both;
+}
+
+@keyframes check-enter {
+  from { opacity: 0; transform: scale(.65); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.contact-form .button.is-success { background: #b9c2a5; }
+.contact-form .button.is-error { background: #d8a69d; }
+
+@media (hover: hover) and (pointer: fine) {
+  .contact-details a:hover { color: var(--gold); }
+  .contact-email:hover span { transform: translate(3px, -3px); }
 }
 
 .form-note {
@@ -161,5 +270,14 @@ async function submitForm(event) {
     gap: 50px;
     margin-top: 35px;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-field::after, .contact-email span {
+    transition: none;
+  }
+  .submit-spinner { animation: none; }
+  .submit-check, .copy-toast { animation: none; }
+  .contact-email:hover span { transform: none; }
 }
 </style>

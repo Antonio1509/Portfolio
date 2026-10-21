@@ -1,10 +1,48 @@
 <script setup>
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { gsap } from 'gsap'
 import monogram from '../assets/cg-monogram.png'
 import HeadingFlow from '../components/HeadingFlow.vue'
+import { isReducedMotion } from '../utils/animations'
+
+const home = ref(null)
+let animationContext
+
+onMounted(() => {
+  if (isReducedMotion()) return
+
+  animationContext = gsap.context(() => {
+    const intro = gsap.timeline()
+    intro.fromTo('.headline-line-inner', { yPercent: 110 }, {
+      yPercent: 0,
+      duration: 0.7,
+      stagger: 0.12,
+      ease: 'power4.out',
+    })
+    intro.to('.bot-wave', {
+      rotation: -24,
+      transformOrigin: '50px 31px',
+      duration: 0.2,
+      ease: 'power1.inOut',
+      repeat: 3,
+      yoyo: true,
+    }, 0.15)
+    gsap.to('.hello-bot', {
+      y: -2,
+      duration: 1.8,
+      ease: 'sine.inOut',
+      repeat: -1,
+      yoyo: true,
+      delay: 1.1,
+    })
+  }, home.value)
+})
+
+onBeforeUnmount(() => animationContext?.revert())
 </script>
 
 <template>
-  <section id="home" class="home-hero page-wrap">
+  <section id="home" ref="home" class="home-hero page-wrap">
     <div class="hero-copy">
       <div class="hero-greeting">
         <svg class="hello-bot" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
@@ -21,19 +59,25 @@ import HeadingFlow from '../components/HeadingFlow.vue'
             <path d="M56.5 22v-5" />
           </g>
         </svg>
-        <HeadingFlow><h1>Hi! I'm Chad<br />Welcome to my portfolio</h1></HeadingFlow>
+        <HeadingFlow>
+          <h1>
+            <span class="headline-line"><span class="headline-line-inner">Hi! I'm Chad</span></span>
+            <span class="headline-line"><span class="headline-line-inner">Welcome to my</span></span>
+            <span class="headline-line"><span class="headline-line-inner">portfolio</span></span>
+          </h1>
+        </HeadingFlow>
       </div>
       <p class="hero-intro">
         Software development student at Life Choices Academy | Cape Town<br />
         Open to internships and learning opportunities.
       </p>
       <div class="hero-actions">
-        <a v-magnetic class="button button-gold" href="#projects">Explore My Work <span>→</span></a>
-        <a class="text-link" href="#about">About <span>→</span></a>
+        <a v-magnetic class="button button-gold" href="#projects"><span class="button-label">Explore My Work</span><span>→</span></a>
+        <a v-magnetic class="text-link" href="#about">About <span>→</span></a>
       </div>
     </div>
 
-    <article class="featured-project">
+    <article v-tilt="6" class="featured-project">
       <a class="featured-image" href="#projects" aria-label="Browse Chad Gys projects">
         <img :src="monogram" alt="CG gold monogram logo" />
       </a>
@@ -67,6 +111,15 @@ import HeadingFlow from '../components/HeadingFlow.vue'
   width: fit-content;
 }
 
+.headline-line {
+  display: block;
+  overflow: hidden;
+}
+
+.headline-line-inner {
+  display: inline-block;
+}
+
 .hello-bot {
   display: block;
   width: 55px;
@@ -96,25 +149,12 @@ import HeadingFlow from '../components/HeadingFlow.vue'
 .bot-wave {
   transform-box: view-box;
   transform-origin: 50px 31px;
-  animation: bot-wave 1.8s ease-in-out infinite;
-}
-
-@keyframes bot-wave {
-  0%, 100% { transform: rotate(0); }
-  20%, 55% { transform: rotate(-24deg); }
-  38%, 73% { transform: rotate(4deg); }
 }
 
 .hero-copy h1 {
   font: 600 clamp(46px, 6.2vw, 72px)/1.12 var(--display);
   letter-spacing: -3px;
   margin: 0 0 24px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bot-wave {
-    animation: none;
-  }
 }
 
 .hero-copy h1 em {
@@ -143,11 +183,28 @@ import HeadingFlow from '../components/HeadingFlow.vue'
 }
 
 .featured-image {
+  position: relative;
   display: grid;
   place-items: center;
   overflow: hidden;
   background: radial-gradient(circle, rgba(216, 182, 119, .1), #111214 62%);
   aspect-ratio: 2.1 / 1;
+}
+
+.featured-image::after {
+  content: "";
+  position: absolute;
+  inset: -55% auto -55% -45%;
+  width: 38%;
+  background: linear-gradient(90deg, transparent, rgba(228,201,147,.35), transparent);
+  transform: translateX(-180%) rotate(20deg);
+  animation: monogram-shimmer 7s cubic-bezier(.22,1,.36,1) 1s infinite;
+  pointer-events: none;
+}
+
+@keyframes monogram-shimmer {
+  0%, 68% { transform: translateX(-180%) rotate(20deg); }
+  88%, 100% { transform: translateX(470%) rotate(20deg); }
 }
 
 .featured-image img {
@@ -160,8 +217,42 @@ import HeadingFlow from '../components/HeadingFlow.vue'
   transition: transform .25s ease;
 }
 
-.featured-image:hover img {
-  transform: scale(1.02);
+.featured-project.tilt-card {
+  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform .35s cubic-bezier(.22,1,.36,1);
+}
+
+.button-gold {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.button-gold::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(110deg, transparent 20%, rgba(255,255,255,.38) 50%, transparent 80%);
+  transform: translateX(-120%);
+  transition: transform .65s cubic-bezier(.22,1,.36,1);
+}
+
+.hero-actions .button-gold span,
+.hero-actions .text-link span {
+  display: inline-block;
+  transition: transform .35s cubic-bezier(.22,1,.36,1);
+}
+
+.hero-actions .button-gold > span {
+  position: relative;
+  z-index: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .featured-image:hover img { transform: scale(1.02); }
+  .hero-actions .button-gold:hover::after { transform: translateX(120%); }
+  .hero-actions a:hover span:not(.button-label) { transform: translateX(4px); }
 }
 
 .featured-caption {
@@ -218,6 +309,28 @@ import HeadingFlow from '../components/HeadingFlow.vue'
   .featured-caption {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .featured-project.tilt-card {
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-image::after {
+    animation: none;
+  }
+  .button-gold::after { display: none; }
+  .featured-image:hover img,
+  .hero-actions a:hover span:not(.button-label) {
+    transform: none;
+  }
+  .hero-actions .button-gold::after,
+  .hero-actions a span:not(.button-label) {
+    transition: none;
   }
 }
 </style>

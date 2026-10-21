@@ -4,13 +4,14 @@ Welcome to the repository for **My Journey**, a modern, responsive portfolio bui
 
 ## Purpose
 
-This portfolio is an online introduction and evolving record of my software development journey. It gives mentors, peers, and potential employers a place to learn about me, review the technologies I am practicing, and contact me about opportunities or collaboration.
+This portfolio is an online introduction and evolving record of my software development journey. Its single-page sections give mentors, peers, and potential employers a place to learn about me, review the technologies I am practicing, and contact me about opportunities or collaboration.
 
 ## Features
 
-- Five routed sections: Home, About, Projects, Skills, and Contact.
+- Five main sections: Home, About, Projects, Skills, and Contact.
 - Responsive layouts for desktop and mobile screens.
 - Reusable navigation and footer components shared across the site.
+- Scroll-triggered reveals, parallax, and pointer interactions powered by GSAP and ScrollTrigger, with reduced-motion support.
 - Dark theme, gold accents, and the CG monogram used as the site logo and favicon.
 - Projects page featuring the Web Scraping Dashboard, Property Mini Listings, and LocalCart Marketplace, with project links.
 - Skills grouped into frontend, tools, and backend technologies.
@@ -22,6 +23,7 @@ This portfolio is an online introduction and evolving record of my software deve
 - **Vue 3** single-file components for the interface.
 - **Vue Router** for client-side page navigation.
 - **Vite** for local development and production builds.
+- **GSAP** and **ScrollTrigger** for reusable, lifecycle-managed motion.
 - **HTML** for accessible page structure and form controls.
 - **CSS** for responsive layouts, typography, visual styling, and interaction states.
 
@@ -55,6 +57,8 @@ The contact form posts to the Formspree endpoint configured in `src/views/Contac
 |-- src/
     |-- App.vue                # Top-level layout
     |-- main.js                # Vue app entry point
+    |-- utils/
+    |   `-- animations.js     # Shared GSAP animation helpers
     |-- assets/
     |   |-- cg-monogram.png    # Monogram logo and browser tab icon
     |   |-- about-portrait.jpg # About page portrait

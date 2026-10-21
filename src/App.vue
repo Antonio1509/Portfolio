@@ -8,10 +8,18 @@ import AboutView from './views/AboutView.vue'
 import SkillsView from './views/SkillsView.vue'
 import ProjectsView from './views/ProjectsView.vue'
 import ContactView from './views/ContactView.vue'
+import monogram from './assets/cg-monogram.png'
+import { createScrollProgress, isReducedMotion } from './utils/animations'
 
 const menuOpen = ref(false)
 const cursorGlow = ref(null)
+const progress = ref(null)
+const activeSection = ref('home')
+const introVisible = ref(false)
 let glowFrame = 0
+let introTimer
+let sectionObserver
+let cleanupProgress = () => {}
 let cursorPosition = { x: 0, y: 0 }
 
 function updateCursorGlow(event) {
@@ -25,6 +33,26 @@ function updateCursorGlow(event) {
 }
 
 onMounted(() => {
+  if (!isReducedMotion()) {
+    introVisible.value = true
+    introTimer = window.setTimeout(() => {
+      introVisible.value = false
+    }, 850)
+  }
+
+  cleanupProgress = createScrollProgress(progress.value)
+
+  if ('IntersectionObserver' in window) {
+    sectionObserver = new IntersectionObserver((entries) => {
+      const visibleSections = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((first, second) => second.intersectionRatio - first.intersectionRatio)
+      if (visibleSections[0]) activeSection.value = visibleSections[0].target.id
+    }, { threshold: [0.05, 0.1, 0.25], rootMargin: '-15% 0px -55% 0px' })
+
+    document.querySelectorAll('main > section[id]').forEach((section) => sectionObserver.observe(section))
+  }
+
   if (window.matchMedia('(hover: hover) and (pointer: fine)').matches
     && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     window.addEventListener('pointermove', updateCursorGlow, { passive: true })
@@ -32,6 +60,9 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  window.clearTimeout(introTimer)
+  sectionObserver?.disconnect()
+  cleanupProgress()
   window.removeEventListener('pointermove', updateCursorGlow)
   if (glowFrame) cancelAnimationFrame(glowFrame)
 })
@@ -39,8 +70,18 @@ onBeforeUnmount(() => {
 
 <template>
   <AmbientLines />
+  <div ref="progress" class="scroll-progress" aria-hidden="true"></div>
   <div ref="cursorGlow" class="cursor-glow" aria-hidden="true"></div>
-  <SiteHeader :menu-open="menuOpen" @toggle-menu="menuOpen = !menuOpen" @navigate="menuOpen = false" />
+  <div v-if="introVisible" class="page-intro" aria-hidden="true">
+    <img :src="monogram" alt="" />
+  </div>
+  <SiteHeader
+    :menu-open="menuOpen"
+    :active-section="activeSection"
+    @toggle-menu="menuOpen = !menuOpen"
+    @navigate="menuOpen = false"
+    @section-change="activeSection = $event"
+  />
   <main>
     <HomeView />
     <AboutView />
@@ -121,15 +162,70 @@ main, .site-header, .site-footer {
   }
 }
 
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  width: 100%;
+  height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
 .scroll-reveal {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity .55s ease var(--reveal-delay, 0ms), transform .55s cubic-bezier(.2,.7,.2,1) var(--reveal-delay, 0ms);
+  transition:
+    opacity .55s ease var(--reveal-delay, 0ms),
+    transform .55s cubic-bezier(.2,.7,.2,1) var(--reveal-delay, 0ms);
 }
 
 .scroll-reveal-visible {
   opacity: 1;
   transform: none;
+}
+
+.scroll-reveal-clip {
+  clip-path: inset(100% 0% 0% 0%);
+  transform: scale(1.15);
+  transition:
+    clip-path .9s cubic-bezier(.22,1,.36,1) var(--reveal-delay, 0ms),
+    transform .9s cubic-bezier(.22,1,.36,1) var(--reveal-delay, 0ms);
+}
+
+.scroll-reveal-clip.scroll-reveal-visible {
+  clip-path: inset(0% 0% 0% 0%);
+  transform: none;
+}
+
+.page-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  animation: intro-exit .85s cubic-bezier(.22,1,.36,1) forwards;
+}
+
+.page-intro img {
+  width: 92px;
+  height: 92px;
+  object-fit: contain;
+  animation: intro-mark .75s cubic-bezier(.22,1,.36,1) both;
+}
+
+@keyframes intro-mark {
+  from { opacity: 0; transform: scale(.82); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes intro-exit {
+  0%, 70% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 .magnetic {
@@ -198,20 +294,12 @@ button, a {
   padding: 14px 19px;
   font-size: 12px;
   font-weight: 600;
-  transition: background .2s,transform .2s;
-}
-
-.button:hover {
-  transform: translateY(-2px);
+  transition: transform .35s cubic-bezier(.22,1,.36,1);
 }
 
 .button-gold {
   background: var(--gold);
   color: #171613;
-}
-
-.button-gold:hover {
-  background: var(--gold-bright);
 }
 
 .text-link {
@@ -226,8 +314,16 @@ button, a {
   transition: transform .25s ease;
 }
 
-.text-link:hover span {
-  transform: translateX(3px);
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
+    transform: translateY(-2px);
+  }
+  .button-gold:hover {
+    background: var(--gold-bright);
+  }
+  .text-link:hover span {
+    transform: translateX(3px);
+  }
 }
 
 .inner-page {
@@ -268,27 +364,6 @@ button, a {
 
 .router-link-active {
   outline-color: transparent;
-}
-
-@keyframes hero-enter {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.hero-greeting h1 {
-  animation: hero-enter .65s cubic-bezier(.2,.7,.2,1) both;
-}
-
-.hero-intro {
-  animation: hero-enter .65s cubic-bezier(.2,.7,.2,1) .13s both;
-}
-
-.hero-actions {
-  animation: hero-enter .65s cubic-bezier(.2,.7,.2,1) .26s both;
-}
-
-.featured-project {
-  animation: hero-enter .75s cubic-bezier(.2,.7,.2,1) .39s both;
 }
 
 #netlify-badge,
@@ -333,18 +408,23 @@ iframe[src*="netlify" i] {
   html {
     scroll-behavior: auto;
   }
-  .scroll-reveal,
-  .hero-greeting h1,
+  .page-intro,
+  .page-intro img { animation: none; }
   .hero-intro,
   .hero-actions,
-  .featured-project {
-    opacity: 1;
-    transform: none;
-    animation: none;
-    transition: none;
-  }
+  .featured-project { animation: none; opacity: 1; transform: none; }
   .cursor-glow {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal,
+  .scroll-reveal-clip {
+    opacity: 1;
+    clip-path: none;
+    transform: none;
+    transition: none;
   }
   .button:hover {
     transform: none;
