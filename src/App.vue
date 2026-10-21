@@ -8,7 +8,6 @@ import AboutView from './views/AboutView.vue'
 import SkillsView from './views/SkillsView.vue'
 import ProjectsView from './views/ProjectsView.vue'
 import ContactView from './views/ContactView.vue'
-import monogram from './assets/cg-monogram.png'
 import { createScrollProgress, isReducedMotion } from './utils/animations'
 
 const menuOpen = ref(false)
@@ -37,7 +36,7 @@ onMounted(() => {
     introVisible.value = true
     introTimer = window.setTimeout(() => {
       introVisible.value = false
-    }, 850)
+    }, 3500)
   }
 
   cleanupProgress = createScrollProgress(progress.value)
@@ -73,7 +72,10 @@ onBeforeUnmount(() => {
   <div ref="progress" class="scroll-progress" aria-hidden="true"></div>
   <div ref="cursorGlow" class="cursor-glow" aria-hidden="true"></div>
   <div v-if="introVisible" class="page-intro" aria-hidden="true">
-    <img :src="monogram" alt="" />
+    <div class="page-intro-name">
+      <span class="page-intro-word page-intro-chad">Chad</span>
+      <span class="page-intro-word page-intro-gys">Gys</span>
+    </div>
   </div>
   <SiteHeader
     :menu-open="menuOpen"
@@ -208,23 +210,54 @@ main, .site-header, .site-footer {
   display: grid;
   place-items: center;
   background: var(--bg);
-  animation: intro-exit .85s cubic-bezier(.22,1,.36,1) forwards;
+  animation: intro-exit 3.5s cubic-bezier(.22,1,.36,1) forwards;
 }
 
-.page-intro img {
-  width: 92px;
-  height: 92px;
-  object-fit: contain;
-  animation: intro-mark .75s cubic-bezier(.22,1,.36,1) both;
+.page-intro-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 2vw, 24px);
+  perspective: 900px;
+  white-space: nowrap;
+  font: 800 clamp(40px, 10vw, 112px)/1 var(--display);
+  letter-spacing: -.07em;
 }
 
-@keyframes intro-mark {
-  from { opacity: 0; transform: scale(.82); }
-  to { opacity: 1; transform: scale(1); }
+.page-intro-word {
+  display: inline-block;
+  opacity: 0;
+  background-image: linear-gradient(135deg, #fff0b7 0%, #edc66e 48%, #c58b31 100%);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation-duration: 2.8s;
+  animation-timing-function: cubic-bezier(.2,.75,.25,1);
+  animation-fill-mode: both;
+}
+
+.page-intro-chad {
+  animation-name: intro-from-left;
+}
+
+.page-intro-gys {
+  animation-name: intro-from-right;
+}
+
+@keyframes intro-from-left {
+  0% { opacity: 0; transform: translate3d(-55vw, 0, -900px) scale(.12); }
+  72% { opacity: 1; transform: translate3d(0, 0, 24px) scale(1.04); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes intro-from-right {
+  0% { opacity: 0; transform: translate3d(55vw, 0, -900px) scale(.12); }
+  72% { opacity: 1; transform: translate3d(0, 0, 24px) scale(1.04); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
 
 @keyframes intro-exit {
-  0%, 70% { opacity: 1; }
+  0%, 82% { opacity: 1; }
   100% { opacity: 0; }
 }
 
@@ -409,7 +442,7 @@ iframe[src*="netlify" i] {
     scroll-behavior: auto;
   }
   .page-intro,
-  .page-intro img { animation: none; }
+  .page-intro-word { animation: none; opacity: 1; transform: none; }
   .hero-intro,
   .hero-actions,
   .featured-project { animation: none; opacity: 1; transform: none; }
