@@ -1,6 +1,7 @@
 <script setup>
 import { onBeforeUnmount, reactive, ref } from 'vue'
 import HeadingFlow from '../components/HeadingFlow.vue'
+const formspreeEndpoint = 'https://formspree.io/f/mgobdenv'
 const form = reactive({ name: '', email: '', message: '' })
 const status = ref('')
 const formState = ref('idle')
@@ -14,7 +15,7 @@ async function submitForm(event) {
   try {
     const formData = new FormData(event.currentTarget)
     formData.set('_subject', `New portfolio message from ${form.name}`)
-    const response = await fetch('https://formspree.io/f/mjgznprl', {
+    const response = await fetch(formspreeEndpoint, {
       method: 'POST',
       body: formData,
       headers: { Accept: 'application/json' },
@@ -78,7 +79,7 @@ onBeforeUnmount(() => window.clearTimeout(toastTimer))
           </div>
         </div>
       </div>
-      <form v-reveal class="contact-form" action="https://formspree.io/f/mjgznprl" method="POST" @submit.prevent="submitForm">
+      <form v-reveal class="contact-form" :action="formspreeEndpoint" method="POST" @submit.prevent="submitForm">
         <div class="form-field">
           <label for="name">Full Name *</label>
           <input id="name" v-model="form.name" name="name" placeholder="Full Name" autocomplete="name" required />
