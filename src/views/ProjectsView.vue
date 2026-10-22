@@ -1,6 +1,6 @@
 <script setup>
 import HeadingFlow from '../components/HeadingFlow.vue'
-import portfolioScreenshot from '../assets/projects/portfolio-home.jpg'
+import portfolioScreenshot from '../assets/projects/portfolio-home.png'
 import foodFestHomepage from '../assets/projects/food-fest-home.jpg'
 import ecommerceHomepage from '../assets/projects/ecommerce-home.jpg'
 import dashboardHomepage from '../assets/projects/scraping-dashboard-home.jpg'
