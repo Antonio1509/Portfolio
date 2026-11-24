@@ -77,6 +77,9 @@ onBeforeUnmount(() => animationContext?.revert())
       <div class="hero-actions">
         <a v-magnetic class="button button-gold" href="#projects"><span class="button-label">Explore My Work</span><span>→</span></a>
         <a v-magnetic class="text-link" href="#about">About <span>→</span></a>
+        <a v-magnetic class="button button-outline" href="/chad-gys-cv.pdf" target="_blank" rel="noopener noreferrer" aria-label="View Chad Gys's CV (opens in a new tab)">
+          <span class="button-label">View My CV</span><span aria-hidden="true">↗</span>
+        </a>
       </div>
     </div>
 
@@ -174,6 +177,7 @@ onBeforeUnmount(() => animationContext?.revert())
 
 .hero-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 28px;
   margin-top: 32px;
@@ -229,6 +233,18 @@ onBeforeUnmount(() => animationContext?.revert())
   position: relative;
   isolation: isolate;
   overflow: hidden;
+}
+
+.button-outline {
+  border: 1px solid var(--line);
+  color: #dedbd4;
+  background: transparent;
+  transition: border-color .25s ease, color .25s ease, transform .35s cubic-bezier(.22,1,.36,1);
+}
+
+.button-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold-bright);
 }
 
 .button-gold::after {

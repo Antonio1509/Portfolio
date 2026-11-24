@@ -69,7 +69,7 @@ onBeforeUnmount(() => window.clearTimeout(toastTimer))
         <HeadingFlow><h1>Let's Connect and Collaborate</h1></HeadingFlow>
         <div class="contact-details">
           <div v-reveal class="contact-detail"><h2>Location</h2><span>Cape Town</span></div>
-          <div v-reveal="1" class="contact-detail"><h2>Phone</h2><a href="tel:06835863">06835863</a></div>
+          <div v-reveal="1" class="contact-detail"><h2>Phone</h2><a href="tel:06835863">06835862</a></div>
           <div v-reveal="2" class="contact-detail">
             <h2>Email</h2>
             <a v-magnetic class="contact-email" href="mailto:gyschad206@email.com" @click="copyEmail">
