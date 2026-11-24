@@ -15,6 +15,7 @@ const cursorGlow = ref(null)
 const progress = ref(null)
 const activeSection = ref('home')
 const introVisible = ref(false)
+const theme = ref('dark')
 let glowFrame = 0
 let introTimer
 let sectionObserver
@@ -31,7 +32,14 @@ function updateCursorGlow(event) {
   })
 }
 
+function toggleTheme() {
+  theme.value = theme.value === 'dark' ? 'light' : 'dark'
+  document.documentElement.dataset.theme = theme.value
+}
+
 onMounted(() => {
+  document.documentElement.dataset.theme = theme.value
+
   if (!isReducedMotion()) {
     introVisible.value = true
     introTimer = window.setTimeout(() => {
@@ -80,7 +88,9 @@ onBeforeUnmount(() => {
   <SiteHeader
     :menu-open="menuOpen"
     :active-section="activeSection"
+    :theme="theme"
     @toggle-menu="menuOpen = !menuOpen"
+    @toggle-theme="toggleTheme"
     @navigate="menuOpen = false"
     @section-change="activeSection = $event"
   />
@@ -99,8 +109,9 @@ onBeforeUnmount(() => {
 
 :root {
   font-family: 'DM Sans',sans-serif;
-  color: #eeece6;
-  background: #0c0d0f;
+  color-scheme: dark;
+  color: var(--text);
+  background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   font-smooth: always;
@@ -108,13 +119,54 @@ onBeforeUnmount(() => {
   font-weight: 400;
   --bg: #0c0d0f;
   --panel: #121315;
+  --surface: #111214;
+  --surface-raised: #171717;
   --text: #eeece6;
   --muted: #92918d;
+  --text-secondary: #aaa9a4;
+  --text-body: #a6a49e;
+  --text-subtle: #88867f;
+  --text-dim: #66645f;
+  --text-label: #aaa69b;
+  --status-text: #a9b19f;
+  --line-strong: #393936;
+  --header-bg: rgba(12,13,15,.91);
+  --header-line: rgba(255,255,255,.07);
+  --image-placeholder: #1b1b19;
   --gold: #d5b579;
   --gold-bright: #e4c993;
   --line: #292a29;
   --mono: 'DM Mono',monospace;
   --display: 'Manrope',sans-serif;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f4f2ec;
+  --panel: #fffefa;
+  --surface: #e9e4d8;
+  --surface-raised: #dfd9cd;
+  --text: #25231f;
+  --muted: #625f58;
+  --text-secondary: #625f58;
+  --text-body: #625f58;
+  --text-subtle: #69665f;
+  --text-dim: #77736a;
+  --text-label: #736d60;
+  --status-text: #59664d;
+  --line-strong: #c9c3b6;
+  --header-bg: rgba(244,242,236,.93);
+  --header-line: rgba(37,35,31,.1);
+  --image-placeholder: #e9e5db;
+  --line: #c9c3b6;
+  --ambient-line-one-opacity: .38;
+  --ambient-line-two-opacity: .3;
+  --ambient-line-three-opacity: .23;
+  --heading-line-one-opacity: .38;
+  --heading-line-two-opacity: .32;
+  --heading-line-three-opacity: .27;
+  --heading-line-four-opacity: .22;
+  --heading-line-five-opacity: .17;
 }
 
 * {
@@ -302,7 +354,7 @@ button, a {
 
 .eyebrow {
   font-size: 13px;
-  color: #aaa9a4;
+  color: var(--text-secondary);
   margin: 0 0 16px;
 }
 
@@ -337,7 +389,7 @@ button, a {
 
 .text-link {
   font-size: 12px;
-  color: #dedbd4;
+  color: var(--text);
 }
 
 .text-link span {
@@ -383,7 +435,7 @@ button, a {
 }
 
 .lead {
-  color: #a5a39e;
+  color: var(--text-body);
   font-size: 15px;
   line-height: 1.9;
   max-width: 430px;

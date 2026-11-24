@@ -135,7 +135,7 @@ const projects = [
   min-width: 0;
   position: relative;
   border: 1px solid var(--line);
-  background: #111214;
+  background: var(--surface);
   transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(var(--card-lift, 0));
   transition: transform .35s cubic-bezier(.22,1,.36,1);
   transform-style: preserve-3d;
@@ -151,7 +151,7 @@ const projects = [
   transition: opacity .45s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1);
   pointer-events: none;
 }
-.project-visual { position: relative; width: 100%; aspect-ratio: 16 / 10; overflow: hidden; background: #171717; }
+.project-visual { position: relative; width: 100%; aspect-ratio: 16 / 10; overflow: hidden; background: var(--surface-raised); }
 .project-visual::after {
   content: "";
   position: absolute;
@@ -202,7 +202,7 @@ const projects = [
 .project-details { padding: 22px 25px 24px; }
 .project-kind { margin: 0 0 9px; color: #c7aa72; font: 10px var(--mono); letter-spacing: .07em; text-transform: uppercase; }
 .project-details h2 { margin: 0 0 9px; font: 500 21px var(--display); }
-.project-description { margin: 0; color: #aaa9a4; font-size: 13px; line-height: 1.75; }
+.project-description { margin: 0; color: var(--text-secondary); font-size: 13px; line-height: 1.75; }
 .project-tech { display: flex; flex-wrap: wrap; gap: 7px 16px; margin: 15px 0 0; padding: 0; list-style: none; color: #d2c4a5; font-size: 11px; }
 .project-links {
   display: flex;

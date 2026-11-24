@@ -48,7 +48,7 @@ const aboutParagraphs = [
   position: relative;
   width: 100%;
   height: 360px;
-  background: #1b1b19;
+  background: var(--image-placeholder);
   overflow: hidden;
 }
 
@@ -61,7 +61,7 @@ const aboutParagraphs = [
 
 .about-copy {
   max-width: 550px;
-  color: #a6a49e;
+  color: var(--text-body);
   font-size: 14px;
   line-height: 1.95;
 }

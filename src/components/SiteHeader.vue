@@ -1,10 +1,15 @@
 <script setup>
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { gsap } from 'gsap'
+import monogram from '../assets/cg-monogram-transparent.png'
 import { isReducedMotion } from '../utils/animations'
 
-const props = defineProps({ menuOpen: Boolean, activeSection: { type: String, default: 'home' } })
-const emit = defineEmits(['toggle-menu', 'navigate', 'section-change'])
+const props = defineProps({
+  menuOpen: Boolean,
+  activeSection: { type: String, default: 'home' },
+  theme: { type: String, default: 'dark' },
+})
+const emit = defineEmits(['toggle-menu', 'toggle-theme', 'navigate', 'section-change'])
 const links = [{ to: '#home', label: 'Home' }, { to: '#about', label: 'About' }, { to: '#skills', label: 'Skills' }, { to: '#projects', label: 'Projects' }, { to: '#contact', label: 'Contact' }]
 const nav = ref(null)
 const indicator = ref(null)
@@ -50,18 +55,30 @@ onBeforeUnmount(() => {
 
 <template>
   <header class="site-header">
-    <a class="brand" href="#home" @click="$emit('navigate')" aria-label="Chad Gys home"><span class="brand-mark"><img class="brand-image" src="/src/assets/cg-monogram.png" alt="" /></span><span class="brand-name">CHAD<span>GYS</span></span></a>
-    <button class="menu-toggle" type="button" :aria-expanded="menuOpen" aria-label="Toggle navigation" @click="$emit('toggle-menu')"><span></span><span></span></button>
-    <nav ref="nav" class="nav-links" :class="{ open: menuOpen }" aria-label="Main navigation">
-      <a
-        v-for="link in links"
-        :key="link.to"
-        :href="link.to"
-        :class="{ active: activeSection === link.to.slice(1) }"
-        @click="selectSection(link.to)"
-      >{{ link.label }}</a>
-      <span ref="indicator" class="nav-indicator" aria-hidden="true"></span>
-    </nav>
+    <a class="brand" href="#home" @click="$emit('navigate')" aria-label="Chad Gys home"><span class="brand-mark"><img class="brand-image" :src="monogram" alt="" /></span><span class="brand-name">CHAD<span>GYS</span></span></a>
+    <div class="header-controls">
+      <nav ref="nav" class="nav-links" :class="{ open: menuOpen }" aria-label="Main navigation">
+        <a
+          v-for="link in links"
+          :key="link.to"
+          :href="link.to"
+          :class="{ active: activeSection === link.to.slice(1) }"
+          @click="selectSection(link.to)"
+        >{{ link.label }}</a>
+        <span ref="indicator" class="nav-indicator" aria-hidden="true"></span>
+      </nav>
+      <button
+        class="theme-toggle"
+        type="button"
+        :aria-label="`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`"
+        :aria-pressed="theme === 'light'"
+        @click="emit('toggle-theme')"
+      >
+        <span class="theme-icon" aria-hidden="true">{{ theme === 'dark' ? '☼' : '☾' }}</span>
+        {{ theme === 'dark' ? 'Light mode' : 'Dark mode' }}
+      </button>
+      <button class="menu-toggle" type="button" :aria-expanded="menuOpen" aria-label="Toggle navigation" @click="$emit('toggle-menu')"><span></span><span></span></button>
+    </div>
   </header>
 </template>
 
@@ -72,12 +89,18 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(255,255,255,.07);
-  background: rgba(12,13,15,.91);
+  border-bottom: 1px solid var(--header-line);
+  background: var(--header-bg);
   position: sticky;
   top: 0;
   z-index: 10;
   backdrop-filter: blur(16px);
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 30px;
 }
 
 .brand {
@@ -105,7 +128,7 @@ onBeforeUnmount(() => {
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 
 .brand-name {
@@ -122,7 +145,7 @@ onBeforeUnmount(() => {
 
 .nav-links>a {
   font-size: 13px;
-  color: #aaa9a4;
+  color: var(--text-secondary);
 }
 
 .nav-links>a:focus-visible, .nav-links>a.active {
@@ -145,6 +168,40 @@ onBeforeUnmount(() => {
   pointer-events: none;
 }
 
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 11px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: 500 11px var(--mono);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color .25s ease, color .25s ease, background .25s ease;
+}
+
+.theme-icon {
+  color: var(--gold);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.theme-toggle:focus-visible,
+.menu-toggle:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .theme-toggle:hover {
+    border-color: var(--gold);
+    color: var(--gold-bright);
+  }
+}
+
 .menu-toggle {
   display: none;
 }
@@ -154,6 +211,9 @@ onBeforeUnmount(() => {
     height: 74px;
     padding-inline: 6%;
   }
+  .header-controls {
+    gap: 12px;
+  }
   .menu-toggle {
     width: 38px;
     height: 38px;
@@ -162,9 +222,9 @@ onBeforeUnmount(() => {
     justify-content: center;
     gap: 6px;
     align-items: center;
-    border: 1px solid #393936;
-    background: none;
-    color: white;
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+    color: var(--text);
   }
   .menu-toggle span {
     height: 1px;
@@ -178,7 +238,7 @@ onBeforeUnmount(() => {
     left: 0;
     right: 0;
     padding: 22px 6% 27px;
-    background: #111214;
+    background: var(--panel);
     border-bottom: 1px solid var(--line);
     align-items: stretch;
     gap: 17px;

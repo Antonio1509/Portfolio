@@ -19,7 +19,7 @@ const year = new Date().getFullYear()
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: 20px;
-  color: #777671;
+  color: var(--muted);
   font-size: 11px;
 }
 

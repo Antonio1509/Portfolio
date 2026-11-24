@@ -147,7 +147,7 @@ onBeforeUnmount(() => window.clearTimeout(toastTimer))
   gap: 20px;
   margin-top: 35px;
   font-size: 11px;
-  color: #88867f;
+  color: var(--text-subtle);
 }
 
 .contact-detail h2 {
@@ -157,7 +157,7 @@ onBeforeUnmount(() => window.clearTimeout(toastTimer))
 }
 
 .contact-detail > span, .contact-detail > a:not(.contact-email) {
-  color: #88867f;
+  color: var(--text-subtle);
 }
 
 .contact-form {
@@ -169,7 +169,7 @@ onBeforeUnmount(() => window.clearTimeout(toastTimer))
 .contact-form label {
   font: 9px var(--mono);
   letter-spacing: 1.2px;
-  color: #aaa69b;
+  color: var(--text-label);
   margin: 0 0 9px;
 }
 
@@ -198,7 +198,7 @@ onBeforeUnmount(() => window.clearTimeout(toastTimer))
 
 .contact-form input, .contact-form textarea {
   border: 0;
-  border-bottom: 1px solid #393936;
+  border-bottom: 1px solid var(--line-strong);
   background: transparent;
   color: var(--text);
   border-radius: 0;
@@ -214,7 +214,7 @@ onBeforeUnmount(() => window.clearTimeout(toastTimer))
 }
 
 .contact-form input::placeholder, .contact-form textarea::placeholder {
-  color: #66645f;
+  color: var(--text-dim);
 }
 
 .contact-form .button {
@@ -260,7 +260,7 @@ onBeforeUnmount(() => window.clearTimeout(toastTimer))
 }
 
 .form-note {
-  color: #74736e;
+  color: var(--text-dim);
   font-size: 10px;
   margin: 12px 0;
 }

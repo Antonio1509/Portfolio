@@ -1,7 +1,7 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { gsap } from 'gsap'
-import monogram from '../assets/cg-monogram.png'
+import monogram from '../assets/cg-monogram-transparent.png'
 import HeadingFlow from '../components/HeadingFlow.vue'
 import { isReducedMotion } from '../utils/animations'
 
@@ -170,7 +170,7 @@ onBeforeUnmount(() => animationContext?.revert())
 
 .hero-intro {
   max-width: 450px;
-  color: #aaa9a4;
+  color: var(--text-secondary);
   font-size: 16px;
   line-height: 1.85;
 }
@@ -186,7 +186,7 @@ onBeforeUnmount(() => animationContext?.revert())
 .featured-project {
   min-width: 0;
   border: 1px solid var(--line);
-  background: #111214;
+  background: var(--surface);
 }
 
 .featured-image {
@@ -194,7 +194,7 @@ onBeforeUnmount(() => animationContext?.revert())
   display: grid;
   place-items: center;
   overflow: hidden;
-  background: radial-gradient(circle, rgba(216, 182, 119, .1), #111214 62%);
+  background: radial-gradient(circle, rgba(216, 182, 119, .1), var(--surface) 62%);
   aspect-ratio: 2.1 / 1;
 }
 
@@ -220,7 +220,7 @@ onBeforeUnmount(() => animationContext?.revert())
   aspect-ratio: 1;
   object-fit: contain;
   border-radius: 50%;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
   transition: transform .25s ease;
 }
 
@@ -237,7 +237,7 @@ onBeforeUnmount(() => animationContext?.revert())
 
 .button-outline {
   border: 1px solid var(--line);
-  color: #dedbd4;
+  color: var(--text);
   background: transparent;
   transition: border-color .25s ease, color .25s ease, transform .35s cubic-bezier(.22,1,.36,1);
 }

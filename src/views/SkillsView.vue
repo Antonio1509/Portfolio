@@ -64,7 +64,7 @@ onBeforeUnmount(() => counterCleanups.forEach((cleanup) => cleanup()))
 <style scoped>
 .skills-summary {
   margin: 0 0 15px;
-  color: #aaa9a4;
+  color: var(--text-secondary);
   font: 11px var(--mono);
 }
 .skills-summary span { color: var(--gold-bright); }
@@ -94,13 +94,13 @@ onBeforeUnmount(() => counterCleanups.forEach((cleanup) => cleanup()))
   font: 500 19px var(--display);
   transition: transform .4s cubic-bezier(.22,1,.36,1);
 }
-.skill-row p { max-width: 470px; margin: 0; color: #97958f; font-size: 12px; line-height: 1.65; }
+.skill-row p { max-width: 470px; margin: 0; color: var(--text-body); font-size: 12px; line-height: 1.65; }
 .skill-status {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   justify-self: start;
-  color: #a9b19f;
+  color: var(--status-text);
   font: 10px var(--mono);
   letter-spacing: .04em;
 }

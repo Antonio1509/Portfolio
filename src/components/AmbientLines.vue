@@ -34,7 +34,7 @@ svg {
   stroke: var(--gold);
   stroke-width: 1.2;
   stroke-dasharray: 360 12;
-  opacity: .11;
+  opacity: var(--ambient-line-one-opacity, .11);
   animation: line-flow 26s linear infinite;
 }
 
@@ -43,13 +43,13 @@ svg {
 }
 
 .curve-two {
-  opacity: .08;
+  opacity: var(--ambient-line-two-opacity, .08);
   animation-duration: 36s;
   animation-direction: reverse;
 }
 
 .curve-three {
-  opacity: .06;
+  opacity: var(--ambient-line-three-opacity, .06);
   animation-duration: 32s;
 }
 

@@ -38,14 +38,14 @@
   stroke: var(--gold);
   stroke-width: 1.1;
   stroke-dasharray: 210 18;
-  opacity: .2;
+  opacity: var(--heading-line-one-opacity, .2);
   animation: heading-flow 16s linear infinite;
 }
 
-.strand-2 { animation-delay: -0.4s; opacity: .17; }
-.strand-3 { animation-delay: -0.8s; opacity: .14; }
-.strand-4 { animation-delay: -1.2s; opacity: .11; }
-.strand-5 { animation-delay: -1.6s; opacity: .08; }
+.strand-2 { animation-delay: -0.4s; opacity: var(--heading-line-two-opacity, .17); }
+.strand-3 { animation-delay: -0.8s; opacity: var(--heading-line-three-opacity, .14); }
+.strand-4 { animation-delay: -1.2s; opacity: var(--heading-line-four-opacity, .11); }
+.strand-5 { animation-delay: -1.6s; opacity: var(--heading-line-five-opacity, .08); }
 
 @keyframes heading-flow {
   to { stroke-dashoffset: -2280; }
